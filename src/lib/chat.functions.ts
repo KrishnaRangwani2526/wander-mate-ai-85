@@ -18,7 +18,7 @@ Style:
   the user to open the Book tool which deep-links to Skyscanner / IRCTC / Booking.com.
 `;
 
-const CHAT_TIMEOUT_MS = 12_000;
+const CHAT_TIMEOUT_MS = 60_000;
 
 function withTimeout(ms: number) {
   const controller = new AbortController();
@@ -67,7 +67,7 @@ export async function chat(messages: ChatMsg[]) {
   }
 
   return {
-    text: `⚠️ Live AI is not connected. ${lastFailure}\n\nCheck \`GEMINI_API_KEY\` in \`backend/.env\` and restart the backend. The old canned offline chat is disabled so you do not see fake/pre-filled travel answers.`,
+    text: `⚠️ ${lastFailure}\n\nPlease try that again in a moment.`,
     error: true,
   };
 }
