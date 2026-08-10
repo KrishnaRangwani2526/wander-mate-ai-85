@@ -162,3 +162,51 @@ export const DEFAULT_PROFILE: TravelerProfile = {
   full_name: "", email: "", phone: "", gov_id: "",
   origin_city: "Delhi", meal_pref: "veg", seat_pref: "window",
 };
+
+// ---------------- Buses (RedBus deep links) ----------------
+export interface BusOption {
+  id: string;
+  operator: string;
+  from: string;
+  to: string;
+  depart: string;
+  arrive: string;
+  duration_min: number;
+  bus_type: "Seater" | "AC Sleeper" | "Volvo AC" | "Non-AC Sleeper";
+  price_inr: number;
+  rating: number;
+  external_url: string;
+}
+
+const BUS_OPERATORS = [
+  { name: "RedBus Partner Express", type: "Seater" as const, mult: 0.75, rating: 4.0, departH: 7 },
+  { name: "VRL Travels", type: "Non-AC Sleeper" as const, mult: 0.95, rating: 4.2, departH: 20 },
+  { name: "SRS Travels", type: "AC Sleeper" as const, mult: 1.25, rating: 4.3, departH: 21 },
+  { name: "State Volvo Service", type: "Volvo AC" as const, mult: 1.5, rating: 4.4, departH: 22 },
+];
+
+function slugCity(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+export function searchBuses(dest_id: string, travelers = 1, originCity = "Delhi"): BusOption[] {
+  const dest = DESTINATIONS.find((d) => d.id === dest_id);
+  if (!dest || (dest.country && dest.country !== "India")) return [];
+  const km = Math.hypot(dest.lat - 28.6, dest.lng - 77.2) * 111;
+  if (km < 40 || km > 1600) return [];
+  const baseFare = Math.max(250, Math.round((km * 1.6) / 10) * 10);
+  const baseDuration = Math.round((km / 45) * 60);
+  return BUS_OPERATORS.map((o, i) => ({
+    id: `bus-${i + 1}`,
+    operator: o.name,
+    from: originCity,
+    to: dest.name,
+    depart: fmt(o.departH * 60),
+    arrive: fmt((o.departH * 60 + baseDuration) % 1440),
+    duration_min: baseDuration,
+    bus_type: o.type,
+    price_inr: Math.round(baseFare * o.mult) * travelers,
+    rating: o.rating,
+    external_url: `https://www.redbus.in/bus-tickets/${slugCity(originCity)}-to-${slugCity(dest.name)}`,
+  })).sort((a, b) => a.price_inr - b.price_inr);
+}

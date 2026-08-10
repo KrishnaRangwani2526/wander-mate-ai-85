@@ -8,7 +8,7 @@
  */
 import { DESTINATIONS } from "@/data/destinations";
 import { analyzeText } from "@/lib/engines/analyze";
-import { searchFlights, searchHotels, searchTrains } from "@/lib/engines/booking";
+import { searchBuses, searchFlights, searchHotels, searchTrains } from "@/lib/engines/booking";
 import { estimateCost } from "@/lib/engines/cost";
 import { generateItineraryOptions } from "@/lib/engines/itinerary";
 import { compareAndRank } from "@/lib/engines/rank";
@@ -90,7 +90,7 @@ function destinationCards() {
 }
 
 function localDream(body: any) {
-  const matches = recommendDestinations(body, 8);
+  const matches = recommendDestinations(body, 60);
   const days = body.duration_days ?? 5;
   const travelers = body.travelers ?? 2;
   const style = body.style ?? "mid";
@@ -147,9 +147,10 @@ function localBook(body: any) {
   const flights = searchFlights(body.destination_id, body.travelers ?? 2, body.origin ?? "DEL");
   const trains = searchTrains(body.destination_id, body.travelers ?? 2);
   const hotels = searchHotels(body.destination_id, body.nights ?? 3);
+  const buses = searchBuses(body.destination_id, body.travelers ?? 2, body.origin_city ?? "Delhi");
   const transit = trains[0] && (!flights[0] || trains[0].price_inr < flights[0].price_inr) ? trains[0] : flights[0];
   const hotel = hotels[1] ?? hotels[0] ?? null;
-  return { flights, trains, hotels, best_combo: { transit, hotel, total_inr: (transit?.price_inr ?? 0) + (hotel?.price_per_night_inr ?? 0) * (body.nights ?? 3) } };
+  return { flights, trains, hotels, buses, best_combo: { transit, hotel, total_inr: (transit?.price_inr ?? 0) + (hotel?.price_per_night_inr ?? 0) * (body.nights ?? 3) } };
 }
 
 function localRoute(body: any) {
