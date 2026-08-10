@@ -9,38 +9,281 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TravelRouteImport } from './routes/travel'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SightseeRouteImport } from './routes/sightsee'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PlanRouteImport } from './routes/plan'
+import { Route as OptimizeRouteImport } from './routes/optimize'
+import { Route as DreamRouteImport } from './routes/dream'
+import { Route as BookRouteImport } from './routes/book'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AnalyzeRouteImport } from './routes/analyze'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTrainsRouteImport } from './routes/api/trains'
+import { Route as ApiPlacesRouteImport } from './routes/api/places'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const TravelRoute = TravelRouteImport.update({
+  id: '/travel',
+  path: '/travel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SightseeRoute = SightseeRouteImport.update({
+  id: '/sightsee',
+  path: '/sightsee',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanRoute = PlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OptimizeRoute = OptimizeRouteImport.update({
+  id: '/optimize',
+  path: '/optimize',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DreamRoute = DreamRouteImport.update({
+  id: '/dream',
+  path: '/dream',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyzeRoute = AnalyzeRouteImport.update({
+  id: '/analyze',
+  path: '/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTrainsRoute = ApiTrainsRouteImport.update({
+  id: '/api/trains',
+  path: '/api/trains',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPlacesRoute = ApiPlacesRouteImport.update({
+  id: '/api/places',
+  path: '/api/places',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
+  '/dream': typeof DreamRoute
+  '/optimize': typeof OptimizeRoute
+  '/plan': typeof PlanRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sightsee': typeof SightseeRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/travel': typeof TravelRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/places': typeof ApiPlacesRoute
+  '/api/trains': typeof ApiTrainsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
+  '/dream': typeof DreamRoute
+  '/optimize': typeof OptimizeRoute
+  '/plan': typeof PlanRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sightsee': typeof SightseeRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/travel': typeof TravelRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/places': typeof ApiPlacesRoute
+  '/api/trains': typeof ApiTrainsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
+  '/dream': typeof DreamRoute
+  '/optimize': typeof OptimizeRoute
+  '/plan': typeof PlanRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sightsee': typeof SightseeRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/travel': typeof TravelRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/places': typeof ApiPlacesRoute
+  '/api/trains': typeof ApiTrainsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/analyze'
+    | '/auth'
+    | '/book'
+    | '/dream'
+    | '/optimize'
+    | '/plan'
+    | '/reset-password'
+    | '/sightsee'
+    | '/sitemap.xml'
+    | '/travel'
+    | '/api/chat'
+    | '/api/places'
+    | '/api/trains'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/analyze'
+    | '/auth'
+    | '/book'
+    | '/dream'
+    | '/optimize'
+    | '/plan'
+    | '/reset-password'
+    | '/sightsee'
+    | '/sitemap.xml'
+    | '/travel'
+    | '/api/chat'
+    | '/api/places'
+    | '/api/trains'
+  id:
+    | '__root__'
+    | '/'
+    | '/analyze'
+    | '/auth'
+    | '/book'
+    | '/dream'
+    | '/optimize'
+    | '/plan'
+    | '/reset-password'
+    | '/sightsee'
+    | '/sitemap.xml'
+    | '/travel'
+    | '/api/chat'
+    | '/api/places'
+    | '/api/trains'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyzeRoute: typeof AnalyzeRoute
+  AuthRoute: typeof AuthRoute
+  BookRoute: typeof BookRoute
+  DreamRoute: typeof DreamRoute
+  OptimizeRoute: typeof OptimizeRoute
+  PlanRoute: typeof PlanRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SightseeRoute: typeof SightseeRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TravelRoute: typeof TravelRoute
+  ApiChatRoute: typeof ApiChatRoute
+  ApiPlacesRoute: typeof ApiPlacesRoute
+  ApiTrainsRoute: typeof ApiTrainsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/travel': {
+      id: '/travel'
+      path: '/travel'
+      fullPath: '/travel'
+      preLoaderRoute: typeof TravelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sightsee': {
+      id: '/sightsee'
+      path: '/sightsee'
+      fullPath: '/sightsee'
+      preLoaderRoute: typeof SightseeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plan': {
+      id: '/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof PlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/optimize': {
+      id: '/optimize'
+      path: '/optimize'
+      fullPath: '/optimize'
+      preLoaderRoute: typeof OptimizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dream': {
+      id: '/dream'
+      path: '/dream'
+      fullPath: '/dream'
+      preLoaderRoute: typeof DreamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyze': {
+      id: '/analyze'
+      path: '/analyze'
+      fullPath: '/analyze'
+      preLoaderRoute: typeof AnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +291,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/trains': {
+      id: '/api/trains'
+      path: '/api/trains'
+      fullPath: '/api/trains'
+      preLoaderRoute: typeof ApiTrainsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/places': {
+      id: '/api/places'
+      path: '/api/places'
+      fullPath: '/api/places'
+      preLoaderRoute: typeof ApiPlacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyzeRoute: AnalyzeRoute,
+  AuthRoute: AuthRoute,
+  BookRoute: BookRoute,
+  DreamRoute: DreamRoute,
+  OptimizeRoute: OptimizeRoute,
+  PlanRoute: PlanRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SightseeRoute: SightseeRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TravelRoute: TravelRoute,
+  ApiChatRoute: ApiChatRoute,
+  ApiPlacesRoute: ApiPlacesRoute,
+  ApiTrainsRoute: ApiTrainsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
