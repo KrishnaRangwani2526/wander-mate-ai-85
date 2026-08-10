@@ -25,7 +25,7 @@ function ResetPasswordPage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setReady(!!data.session));
+    void supabase.auth.getSession().then((res) => setReady(Boolean(res.data.session)));
   }, []);
 
   async function submit(e: React.FormEvent) {
