@@ -271,7 +271,9 @@ function SmartImg({ src, alt, className }: { src: string; alt: string; className
 
 function Results({ results }: { results: DreamResultItem[] }) {
   const navigate = useNavigate();
-  const [top, ...rest] = results;
+  const [top, ...restAll] = results;
+  const [visible, setVisible] = useState(11);
+  const rest = restAll.slice(0, visible);
   const topImg = heroFor(top);
 
   function pickAndPlan(r: DreamResultItem) {
@@ -288,7 +290,7 @@ function Results({ results }: { results: DreamResultItem[] }) {
     <div>
       <div className="mb-6 flex items-baseline justify-between">
         <h2 className="font-display text-2xl font-bold sm:text-3xl">Your ranked picks</h2>
-        <span className="text-sm text-muted-foreground">{results.length} matches</span>
+        <span className="text-sm text-muted-foreground">{results.length} matches · showing {1 + rest.length}</span>
       </div>
 
       <article className="mb-8 grid overflow-hidden rounded-2xl border border-border bg-card shadow-card md:grid-cols-[1.2fr_1fr]">
@@ -354,6 +356,17 @@ function Results({ results }: { results: DreamResultItem[] }) {
           </div>
         ))}
       </div>
+
+      {visible < restAll.length && (
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setVisible((v) => v + 12)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-secondary"
+          >
+            Show more ({restAll.length - visible} left)
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Plane, Train, Hotel, ExternalLink, Save, User, Check, Star, Sparkles, Loader2, Calendar, TrendingDown, MapPin, Plus, X as XIcon, ArrowRight } from "lucide-react";
+import { Plane, Train, Bus, Hotel, ExternalLink, Save, User, Check, Star, Sparkles, Loader2, Calendar, TrendingDown, MapPin, Plus, X as XIcon, ArrowRight } from "lucide-react";
 import { DESTINATIONS } from "@/data/destinations";
 import { api } from "@/lib/api";
 import { PageHero } from "@/components/PageHero";
@@ -36,7 +36,7 @@ const IATA_TO_CITY_NAME: Record<string, string> = {
   TVC: "trivandrum",
 };
 
-type Tab = "flights" | "trains" | "hotels";
+type Tab = "flights" | "trains" | "buses" | "hotels";
 
 interface FlightOption {
   id: string;
@@ -66,6 +66,20 @@ interface TrainOption {
   class: "SL" | "3A" | "2A" | "1A";
   price_inr: number;
   availability: string;
+  external_url: string;
+}
+
+interface BusOption {
+  id: string;
+  operator: string;
+  from: string;
+  to: string;
+  depart: string;
+  arrive: string;
+  duration_min: number;
+  bus_type: string;
+  price_inr: number;
+  rating: number;
   external_url: string;
 }
 
@@ -126,6 +140,7 @@ function BookPage() {
   const [flights, setFlights] = useState<FlightOption[]>([]);
   const [trains, setTrains] = useState<TrainOption[]>([]);
   const [hotels, setHotels] = useState<HotelOption[]>([]);
+  const [buses, setBuses] = useState<BusOption[]>([]);
 
   useEffect(() => {
     try {
@@ -136,16 +151,18 @@ function BookPage() {
 
   useEffect(() => {
     // Load booking options from backend
-    api.book({ destination_id: destId, travelers, nights, origin })
+    api.book({ destination_id: destId, travelers, nights, origin, origin_city: IATA_TO_CITY_NAME[origin] ?? "delhi" })
       .then((data: any) => {
         setFlights(data.flights || []);
         setTrains(data.trains || []);
         setHotels(data.hotels || []);
+        setBuses(data.buses || []);
       })
       .catch(() => {
         setFlights([]);
         setTrains([]);
         setHotels([]);
+        setBuses([]);
       });
   }, [destId, travelers, nights, origin]);
 
@@ -192,6 +209,7 @@ function BookPage() {
               {([
                 { k: "flights", l: "Flights", I: Plane, n: flights.length },
                 { k: "trains", l: "Trains", I: Train, n: trains.length },
+                { k: "buses", l: "Buses", I: Bus, n: buses.length },
                 { k: "hotels", l: "Hotels", I: Hotel, n: hotels.length },
               ] as const).map((t) => (
                 <button
@@ -208,6 +226,7 @@ function BookPage() {
             <div className="mt-4 space-y-3">
               {tab === "flights" && flights.map((f, i) => <FlightRow key={f.id} f={f} best={i === 0} />)}
               {tab === "trains" && (trains.length ? trains.map((t, i) => <TrainRow key={t.id} t={t} best={i === 0} />) : <Empty msg="No rail link from Delhi for this destination." />)}
+              {tab === "buses" && (buses.length ? buses.map((b, i) => <BusRow key={b.id} b={b} best={i === 0} />) : <Empty msg="No practical bus route for this distance — try flights or trains." />)}
               {tab === "hotels" && hotels.map((h, i) => <HotelRow key={h.id} h={h} nights={nights} best={i === 0} />)}
             </div>
           </div>
@@ -251,6 +270,26 @@ function BookPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pb-4">
+        <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+          <h3 className="font-display font-bold text-foreground">Book on the official site</h3>
+          <p className="text-xs text-muted-foreground">Live availability and payment happen on the operator's own website.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {[
+              { l: "IRCTC — trains", u: "https://www.irctc.co.in/nget/train-search", I: Train },
+              { l: "RedBus — buses", u: `https://www.redbus.in/bus-tickets/${(IATA_TO_CITY_NAME[origin] ?? "delhi")}-to-${dest.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, I: Bus },
+              { l: "Google Flights", u: `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${dest.nearest_airport_iata}`, I: Plane },
+              { l: "Cleartrip — flights", u: `https://www.cleartrip.com/flights/results?from=${origin}&to=${dest.nearest_airport_iata}&adults=${travelers}`, I: Plane },
+              { l: "Booking.com — stays", u: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(dest.name)}`, I: Hotel },
+            ].map((x) => (
+              <a key={x.l} href={x.u} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-secondary">
+                <x.I className="h-3.5 w-3.5" /> {x.l} <ExternalLink className="h-3 w-3 opacity-60" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <MultiLegPanel defaultOrigin={origin} savedDests={savedDestChain(trip)} />
       <FlexSearchPanel />
 
@@ -267,6 +306,27 @@ function BookPage() {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <div><div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>{children}</div>;
+}
+
+function BusRow({ b, best }: { b: BusOption; best?: boolean }) {
+  return (
+    <div className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border p-3 ${best ? "border-foreground bg-secondary/40" : "border-border bg-background"}`}>
+      <div className="min-w-[180px]">
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-foreground">{b.operator}</span>
+          {best && <Badge>Cheapest</Badge>}
+        </div>
+        <div className="text-xs text-muted-foreground">{b.bus_type} · ★ {b.rating} · {b.from} → {b.to}</div>
+      </div>
+      <div className="text-sm text-foreground/80">{b.depart} → {b.arrive} · {Math.round(b.duration_min / 60)}h {b.duration_min % 60}m</div>
+      <div className="flex items-center gap-3">
+        <span className="font-display text-lg font-bold text-foreground">₹{b.price_inr.toLocaleString("en-IN")}</span>
+        <a href={b.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-full bg-foreground px-3 py-1.5 text-xs font-bold text-background hover:opacity-90">
+          RedBus <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
+    </div>
+  );
 }
 
 function Badge({ children }: { children: React.ReactNode }) {

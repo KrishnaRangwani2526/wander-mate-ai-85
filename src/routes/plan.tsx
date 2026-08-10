@@ -29,6 +29,23 @@ const PACE_TINT: Record<string, string> = {
   packed: "bg-amber-100 text-amber-800 border-amber-200",
 };
 
+export const HUBS: { code: string; label: string }[] = [
+  { code: "DEL", label: "Delhi (DEL)" },
+  { code: "BOM", label: "Mumbai (BOM)" },
+  { code: "BLR", label: "Bengaluru (BLR)" },
+  { code: "MAA", label: "Chennai (MAA)" },
+  { code: "CCU", label: "Kolkata (CCU)" },
+  { code: "HYD", label: "Hyderabad (HYD)" },
+  { code: "PNQ", label: "Pune (PNQ)" },
+  { code: "AMD", label: "Ahmedabad (AMD)" },
+  { code: "COK", label: "Kochi (COK)" },
+  { code: "JAI", label: "Jaipur (JAI)" },
+  { code: "LKO", label: "Lucknow (LKO)" },
+  { code: "IXC", label: "Chandigarh (IXC)" },
+  { code: "GAU", label: "Guwahati (GAU)" },
+  { code: "BBI", label: "Bhubaneswar (BBI)" },
+];
+
 const inputCls = "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20";
 
 function PlanPage() {
@@ -55,6 +72,8 @@ function PlanPage() {
   const [likes, setLikes] = useState(saved?.likes?.join(", ") ?? "food, scenic views");
   const [dislikes, setDislikes] = useState(saved?.dislikes?.join(", ") ?? "crowds");
   const [includeFlight, setIncludeFlight] = useState(saved?.include_flight ?? true);
+  const [startCity, setStartCity] = useState<string>((saved as any)?.start_city ?? "DEL");
+  const [endCity, setEndCity] = useState<string>((saved as any)?.end_city ?? "same");
 
   const dest = useMemo(() => DESTINATIONS.find((d) => d.id === destId)!, [destId]);
 
@@ -75,6 +94,9 @@ function PlanPage() {
       likes: likes.split(",").map((s: string) => s.trim()).filter(Boolean),
       dislikes: dislikes.split(",").map((s: string) => s.trim()).filter(Boolean),
       include_flight: includeFlight,
+      start_city: startCity,
+      end_city: endCity === "same" ? startCity : endCity,
+      origin: startCity,
     });
   }
 
@@ -102,6 +124,21 @@ function PlanPage() {
             </Field>
             <Field label="Start date (optional)" icon={<CalendarDays className="h-4 w-4" />}>
               <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputCls} />
+            </Field>
+          </div>
+
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
+            <Field label="Start from (your city)" icon={<MapPin className="h-4 w-4" />}>
+              <select value={startCity} onChange={(e) => setStartCity(e.target.value)} className={inputCls}>
+                {HUBS.map((h) => <option key={h.code} value={h.code}>{h.label}</option>)}
+              </select>
+            </Field>
+            <Field label="End trip at" icon={<MapPin className="h-4 w-4" />}>
+              <select value={endCity} onChange={(e) => setEndCity(e.target.value)} className={inputCls}>
+                <option value="same">Return to start city</option>
+                {HUBS.map((h) => <option key={h.code} value={h.code}>{h.label}</option>)}
+              </select>
+              <p className="mt-1 text-xs text-muted-foreground">Used for return travel cost and booking links.</p>
             </Field>
           </div>
 
@@ -137,7 +174,7 @@ function PlanPage() {
 
           <label className="mt-5 flex items-center gap-2 text-sm">
             <input type="checkbox" checked={includeFlight} onChange={(e) => setIncludeFlight(e.target.checked)} className="h-4 w-4 accent-[var(--brand)]" />
-            Include round-trip flight from Delhi (DEL) in cost
+            Include round-trip flight from {startCity} in cost
           </label>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
