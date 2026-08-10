@@ -18,11 +18,11 @@ import { Route as OptimizeRouteImport } from './routes/optimize'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SightseeRouteImport } from './routes/sightsee'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TravelRouteImport } from './routes/travel'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiPlacesRouteImport } from './routes/api/places'
 import { Route as ApiTrainsRouteImport } from './routes/api/trains'
+import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -69,11 +69,6 @@ const SightseeRoute = SightseeRouteImport.update({
   path: '/sightsee',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TravelRoute = TravelRouteImport.update({
   id: '/travel',
   path: '/travel',
@@ -94,6 +89,11 @@ const ApiTrainsRoute = ApiTrainsRouteImport.update({
   path: '/api/trains',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapXmlRoute = SitemapXmlRouteImport.update({
+  id: '/sitemap/xml',
+  path: '/sitemap/xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -105,11 +105,11 @@ export interface FileRoutesByFullPath {
   '/plan': typeof PlanRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sightsee': typeof SightseeRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/travel': typeof TravelRoute
   '/api/chat': typeof ApiChatRoute
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -121,11 +121,11 @@ export interface FileRoutesByTo {
   '/plan': typeof PlanRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sightsee': typeof SightseeRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/travel': typeof TravelRoute
   '/api/chat': typeof ApiChatRoute
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -138,11 +138,11 @@ export interface FileRoutesById {
   '/plan': typeof PlanRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sightsee': typeof SightseeRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/travel': typeof TravelRoute
   '/api/chat': typeof ApiChatRoute
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
+  '/sitemap/xml': typeof SitemapXmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -156,11 +156,11 @@ export interface FileRouteTypes {
     | '/plan'
     | '/reset-password'
     | '/sightsee'
-    | '/sitemap.xml'
     | '/travel'
     | '/api/chat'
     | '/api/places'
     | '/api/trains'
+    | '/sitemap/xml'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -172,11 +172,11 @@ export interface FileRouteTypes {
     | '/plan'
     | '/reset-password'
     | '/sightsee'
-    | '/sitemap.xml'
     | '/travel'
     | '/api/chat'
     | '/api/places'
     | '/api/trains'
+    | '/sitemap/xml'
   id:
     | '__root__'
     | '/'
@@ -188,11 +188,11 @@ export interface FileRouteTypes {
     | '/plan'
     | '/reset-password'
     | '/sightsee'
-    | '/sitemap.xml'
     | '/travel'
     | '/api/chat'
     | '/api/places'
     | '/api/trains'
+    | '/sitemap/xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -205,11 +205,11 @@ export interface RootRouteChildren {
   PlanRoute: typeof PlanRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SightseeRoute: typeof SightseeRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TravelRoute: typeof TravelRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiPlacesRoute: typeof ApiPlacesRoute
   ApiTrainsRoute: typeof ApiTrainsRoute
+  SitemapXmlRoute: typeof SitemapXmlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -277,13 +277,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SightseeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/travel': {
       id: '/travel'
       path: '/travel'
@@ -312,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTrainsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap/xml': {
+      id: '/sitemap/xml'
+      path: '/sitemap/xml'
+      fullPath: '/sitemap/xml'
+      preLoaderRoute: typeof SitemapXmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -325,12 +325,22 @@ const rootRouteChildren: RootRouteChildren = {
   PlanRoute: PlanRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SightseeRoute: SightseeRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TravelRoute: TravelRoute,
   ApiChatRoute: ApiChatRoute,
   ApiPlacesRoute: ApiPlacesRoute,
   ApiTrainsRoute: ApiTrainsRoute,
+  SitemapXmlRoute: SitemapXmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
