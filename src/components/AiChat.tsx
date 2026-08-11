@@ -115,14 +115,14 @@ export function AiChatLauncher() {
     saveHistory(next);
     setInput("");
     setBusy(true);
+    if (user) void logChat(user.id, "user", trimmed);
     try {
       const res = await ask(next);
-      const final: Msg[] = [
-        ...next,
-        { role: "assistant", content: res.text || "(no reply)", ts: Date.now() },
-      ];
+      const reply = res.text || "(no reply)";
+      const final: Msg[] = [...next, { role: "assistant", content: reply, ts: Date.now() }];
       setMessages(final);
       saveHistory(final);
+      if (user) void logChat(user.id, "assistant", reply);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Request failed";
       const final: Msg[] = [...next, { role: "assistant", content: `⚠️ ${msg}`, ts: Date.now() }];
