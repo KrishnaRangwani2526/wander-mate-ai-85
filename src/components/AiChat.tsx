@@ -62,9 +62,30 @@ export function AiChatLauncher() {
     return res;
   };
 
+  const { user } = useAuth();
+
   useEffect(() => {
     setMessages(loadHistory());
   }, []);
+
+  // Pull this user's saved chat history once they're signed in.
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    loadChatHistory(100).then((rows) => {
+      if (cancelled || !rows.length) return;
+      const cloud: Msg[] = rows.map((r) => ({
+        role: r.role,
+        content: r.content,
+        ts: new Date(r.created_at).getTime(),
+      }));
+      setMessages((cur) => (cloud.length >= cur.length ? cloud : cur));
+      saveHistory(cloud);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   useEffect(() => {
     if (open) {
