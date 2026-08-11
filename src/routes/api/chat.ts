@@ -87,6 +87,18 @@ function extractRoute(text: string) {
 }
 
 /** Free, keyless live-ish context: current date + (optional) weather for the destination. */
+async function fetchFast(url: string, ms = 2500) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), ms);
+  try {
+    return await fetch(url, { signal: ctrl.signal });
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 async function getLiveContext(text: string) {
   const bits: string[] = [];
   const now = new Date();
@@ -98,13 +110,13 @@ async function getLiveContext(text: string) {
   const place = text.match(/\b(?:in|to|at|for)\s+([A-Z][a-zA-Z]{2,20})/)?.[1];
   if (place) {
     try {
-      const geo = await fetch(
+      const geo = await fetchFast(
         `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=1`,
       );
-      const geoJson: any = geo.ok ? await geo.json() : null;
+      const geoJson: any = geo?.ok ? await geo.json() : null;
       const hit = geoJson?.results?.[0];
       if (hit) {
-        const wx = await fetch(
+        const wx = await fetchFast(
           `https://api.open-meteo.com/v1/forecast?latitude=${hit.latitude}&longitude=${hit.longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=5&timezone=auto`,
         );
         const wxJson: any = wx.ok ? await wx.json() : null;
