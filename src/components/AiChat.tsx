@@ -6,6 +6,8 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { chat } from "@/lib/chat.functions";
+import { useAuth } from "@/hooks/useAuth";
+import { logChat, loadChatHistory } from "@/lib/cloudTrips";
 
 type Msg = { role: "user" | "assistant"; content: string; ts: number };
 type AskChatEvent = CustomEvent<{ prompt?: string }>;
