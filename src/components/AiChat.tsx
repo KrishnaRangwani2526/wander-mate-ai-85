@@ -172,7 +172,7 @@ export function AiChatLauncher() {
                 <div>
                   <div className="text-sm font-bold text-foreground">Travel concierge</div>
                   <div className="text-[11px] text-muted-foreground">
-                    Powered by AI · chat saved in this browser
+                    {user ? "Powered by AI · history saved to your account" : "Powered by AI · chat saved in this browser"}
                   </div>
                 </div>
               </div>
