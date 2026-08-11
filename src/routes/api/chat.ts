@@ -119,7 +119,7 @@ async function getLiveContext(text: string) {
         const wx = await fetchFast(
           `https://api.open-meteo.com/v1/forecast?latitude=${hit.latitude}&longitude=${hit.longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=5&timezone=auto`,
         );
-        const wxJson: any = wx.ok ? await wx.json() : null;
+        const wxJson: any = wx?.ok ? await wx.json() : null;
         if (wxJson?.current) {
           bits.push(
             `Live weather for ${hit.name}, ${hit.country ?? ""}: now ${wxJson.current.temperature_2m}°C; next days max ${(
