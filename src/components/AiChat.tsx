@@ -6,6 +6,8 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { chat } from "@/lib/chat.functions";
+import { useAuth } from "@/hooks/useAuth";
+import { logChat, loadChatHistory } from "@/lib/cloudTrips";
 
 type Msg = { role: "user" | "assistant"; content: string; ts: number };
 type AskChatEvent = CustomEvent<{ prompt?: string }>;
@@ -60,9 +62,30 @@ export function AiChatLauncher() {
     return res;
   };
 
+  const { user } = useAuth();
+
   useEffect(() => {
     setMessages(loadHistory());
   }, []);
+
+  // Pull this user's saved chat history once they're signed in.
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    loadChatHistory(100).then((rows) => {
+      if (cancelled || !rows.length) return;
+      const cloud: Msg[] = rows.map((r) => ({
+        role: r.role,
+        content: r.content,
+        ts: new Date(r.created_at).getTime(),
+      }));
+      setMessages((cur) => (cloud.length >= cur.length ? cloud : cur));
+      saveHistory(cloud);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   useEffect(() => {
     if (open) {
@@ -92,14 +115,14 @@ export function AiChatLauncher() {
     saveHistory(next);
     setInput("");
     setBusy(true);
+    if (user) void logChat(user.id, "user", trimmed);
     try {
       const res = await ask(next);
-      const final: Msg[] = [
-        ...next,
-        { role: "assistant", content: res.text || "(no reply)", ts: Date.now() },
-      ];
+      const reply = res.text || "(no reply)";
+      const final: Msg[] = [...next, { role: "assistant", content: reply, ts: Date.now() }];
       setMessages(final);
       saveHistory(final);
+      if (user) void logChat(user.id, "assistant", reply);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Request failed";
       const final: Msg[] = [...next, { role: "assistant", content: `⚠️ ${msg}`, ts: Date.now() }];
@@ -149,7 +172,7 @@ export function AiChatLauncher() {
                 <div>
                   <div className="text-sm font-bold text-foreground">Travel concierge</div>
                   <div className="text-[11px] text-muted-foreground">
-                    Powered by AI · chat saved in this browser
+                    {user ? "Powered by AI · history saved to your account" : "Powered by AI · chat saved in this browser"}
                   </div>
                 </div>
               </div>
