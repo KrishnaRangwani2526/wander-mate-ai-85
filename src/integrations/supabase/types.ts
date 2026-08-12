@@ -38,6 +38,262 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_itineraries: {
+        Row: {
+          budget_inr: number | null
+          city: string
+          created_at: string
+          creator_id: string
+          days: Json
+          id: string
+          summary: string | null
+          title: string
+        }
+        Insert: {
+          budget_inr?: number | null
+          city?: string
+          created_at?: string
+          creator_id: string
+          days?: Json
+          id?: string
+          summary?: string | null
+          title: string
+        }
+        Update: {
+          budget_inr?: number | null
+          city?: string
+          created_at?: string
+          creator_id?: string
+          days?: Json
+          id?: string
+          summary?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_itineraries_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "creators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creators: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          bio: string | null
+          category: string | null
+          city: string
+          cover_url: string | null
+          created_at: string
+          followers: number
+          handle: string
+          id: string
+          kind: string
+          lat: number | null
+          lng: number | null
+          maps_url: string | null
+          name: string
+          phone: string | null
+          price_level: string | null
+          rating: number | null
+          updated_at: string
+          user_id: string | null
+          verified: boolean
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          category?: string | null
+          city?: string
+          cover_url?: string | null
+          created_at?: string
+          followers?: number
+          handle: string
+          id?: string
+          kind?: string
+          lat?: number | null
+          lng?: number | null
+          maps_url?: string | null
+          name: string
+          phone?: string | null
+          price_level?: string | null
+          rating?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verified?: boolean
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          category?: string | null
+          city?: string
+          cover_url?: string | null
+          created_at?: string
+          followers?: number
+          handle?: string
+          id?: string
+          kind?: string
+          lat?: number | null
+          lng?: number | null
+          maps_url?: string | null
+          name?: string
+          phone?: string | null
+          price_level?: string | null
+          rating?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verified?: boolean
+          website?: string | null
+        }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string
+          creator_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "creators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string | null
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id?: string | null
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_likes: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          caption: string | null
+          created_at: string
+          creator_id: string
+          id: string
+          kind: string
+          lat: number | null
+          likes: number
+          lng: number | null
+          media_url: string
+          place_name: string | null
+          tags: string[]
+          video_url: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          creator_id: string
+          id?: string
+          kind?: string
+          lat?: number | null
+          likes?: number
+          lng?: number | null
+          media_url: string
+          place_name?: string | null
+          tags?: string[]
+          video_url?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          creator_id?: string
+          id?: string
+          kind?: string
+          lat?: number | null
+          likes?: number
+          lng?: number | null
+          media_url?: string
+          place_name?: string | null
+          tags?: string[]
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "creators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -61,6 +317,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          author_name: string
+          body: string | null
+          created_at: string
+          creator_id: string
+          id: string
+          rating: number
+          user_id: string | null
+        }
+        Insert: {
+          author_name?: string
+          body?: string | null
+          created_at?: string
+          creator_id: string
+          id?: string
+          rating?: number
+          user_id?: string | null
+        }
+        Update: {
+          author_name?: string
+          body?: string | null
+          created_at?: string
+          creator_id?: string
+          id?: string
+          rating?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "creators"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_trips: {
         Row: {
