@@ -23,6 +23,7 @@ import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiPlacesRouteImport } from './routes/api/places'
 import { Route as ApiTrainsRouteImport } from './routes/api/trains'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
+import { Route as SocialIndexRouteImport } from './routes/social/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -94,6 +95,11 @@ const SitemapXmlRoute = SitemapXmlRouteImport.update({
   path: '/sitemap/xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SocialIndexRoute = SocialIndexRouteImport.update({
+  id: '/social/',
+  path: '/social/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
+  '/social/': typeof SocialIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
+  '/social': typeof SocialIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
+  '/social/': typeof SocialIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
+    | '/social/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
+    | '/social'
   id:
     | '__root__'
     | '/'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
+    | '/social/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   ApiPlacesRoute: typeof ApiPlacesRoute
   ApiTrainsRoute: typeof ApiTrainsRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
+  SocialIndexRoute: typeof SocialIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -312,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapXmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/social/': {
+      id: '/social/'
+      path: '/social'
+      fullPath: '/social/'
+      preLoaderRoute: typeof SocialIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -330,6 +350,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPlacesRoute: ApiPlacesRoute,
   ApiTrainsRoute: ApiTrainsRoute,
   SitemapXmlRoute: SitemapXmlRoute,
+  SocialIndexRoute: SocialIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
