@@ -26,6 +26,8 @@ const NAV = [
   { to: "/sightsee", label: "Sightsee", dot: "bg-rose-500" },
   { to: "/book",     label: "Book",     dot: "bg-violet-500" },
   { to: "/travel",   label: "Travel",   dot: "bg-cyan-500" },
+  { to: "/social",   label: "Social",   dot: "bg-fuchsia-500" },
+  { to: "/vendors",  label: "Vendors",  dot: "bg-amber-500" },
 ] as const;
 
 function NotFoundComponent() {
