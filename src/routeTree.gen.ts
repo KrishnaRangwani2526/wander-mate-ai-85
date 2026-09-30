@@ -19,12 +19,14 @@ import { Route as PlanRouteImport } from './routes/plan'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SightseeRouteImport } from './routes/sightsee'
 import { Route as TravelRouteImport } from './routes/travel'
+import { Route as VendorsRouteImport } from './routes/vendors'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiPlacesRouteImport } from './routes/api/places'
 import { Route as ApiTrainsRouteImport } from './routes/api/trains'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as SocialIndexRouteImport } from './routes/social/index'
 import { Route as SocialHandleRouteImport } from './routes/social/$handle'
+import { Route as SocialPIdRouteImport } from './routes/social/p.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,6 +78,11 @@ const TravelRoute = TravelRouteImport.update({
   path: '/travel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VendorsRoute = VendorsRouteImport.update({
+  id: '/vendors',
+  path: '/vendors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -106,6 +113,11 @@ const SocialHandleRoute = SocialHandleRouteImport.update({
   path: '/social/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SocialPIdRoute = SocialPIdRouteImport.update({
+  id: '/social/p/$id',
+  path: '/social/p/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -118,12 +130,14 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sightsee': typeof SightseeRoute
   '/travel': typeof TravelRoute
+  '/vendors': typeof VendorsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/social/$handle': typeof SocialHandleRoute
   '/social/': typeof SocialIndexRoute
+  '/social/p/$id': typeof SocialPIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -136,12 +150,14 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sightsee': typeof SightseeRoute
   '/travel': typeof TravelRoute
+  '/vendors': typeof VendorsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/social/$handle': typeof SocialHandleRoute
   '/social': typeof SocialIndexRoute
+  '/social/p/$id': typeof SocialPIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -155,12 +171,14 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sightsee': typeof SightseeRoute
   '/travel': typeof TravelRoute
+  '/vendors': typeof VendorsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
   '/social/$handle': typeof SocialHandleRoute
   '/social/': typeof SocialIndexRoute
+  '/social/p/$id': typeof SocialPIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -175,12 +193,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sightsee'
     | '/travel'
+    | '/vendors'
     | '/api/chat'
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
     | '/social/$handle'
     | '/social/'
+    | '/social/p/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,12 +213,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sightsee'
     | '/travel'
+    | '/vendors'
     | '/api/chat'
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
     | '/social/$handle'
     | '/social'
+    | '/social/p/$id'
   id:
     | '__root__'
     | '/'
@@ -211,12 +233,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sightsee'
     | '/travel'
+    | '/vendors'
     | '/api/chat'
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
     | '/social/$handle'
     | '/social/'
+    | '/social/p/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -230,12 +254,14 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SightseeRoute: typeof SightseeRoute
   TravelRoute: typeof TravelRoute
+  VendorsRoute: typeof VendorsRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiPlacesRoute: typeof ApiPlacesRoute
   ApiTrainsRoute: typeof ApiTrainsRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
   SocialHandleRoute: typeof SocialHandleRoute
   SocialIndexRoute: typeof SocialIndexRoute
+  SocialPIdRoute: typeof SocialPIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -310,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vendors': {
+      id: '/vendors'
+      path: '/vendors'
+      fullPath: '/vendors'
+      preLoaderRoute: typeof VendorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -352,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SocialHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/social/p/$id': {
+      id: '/social/p/$id'
+      path: '/social/p/$id'
+      fullPath: '/social/p/$id'
+      preLoaderRoute: typeof SocialPIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -366,12 +406,14 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SightseeRoute: SightseeRoute,
   TravelRoute: TravelRoute,
+  VendorsRoute: VendorsRoute,
   ApiChatRoute: ApiChatRoute,
   ApiPlacesRoute: ApiPlacesRoute,
   ApiTrainsRoute: ApiTrainsRoute,
   SitemapXmlRoute: SitemapXmlRoute,
   SocialHandleRoute: SocialHandleRoute,
   SocialIndexRoute: SocialIndexRoute,
+  SocialPIdRoute: SocialPIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
