@@ -307,6 +307,7 @@ function ItineraryCard({ it }: { it: CreatorItinerary }) {
 
       <Link
         to="/plan"
+        search={{ dest: "udaipur", name: "Udaipur" }}
         className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-[12.5px] font-semibold text-background hover:opacity-90"
       >
         <Star className="h-3.5 w-3.5" /> Plan my own version
