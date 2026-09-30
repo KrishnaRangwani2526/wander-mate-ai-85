@@ -24,6 +24,7 @@ import { Route as ApiPlacesRouteImport } from './routes/api/places'
 import { Route as ApiTrainsRouteImport } from './routes/api/trains'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
 import { Route as SocialIndexRouteImport } from './routes/social/index'
+import { Route as SocialHandleRouteImport } from './routes/social/$handle'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -100,6 +101,11 @@ const SocialIndexRoute = SocialIndexRouteImport.update({
   path: '/social/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SocialHandleRoute = SocialHandleRouteImport.update({
+  id: '/social/$handle',
+  path: '/social/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
+  '/social/$handle': typeof SocialHandleRoute
   '/social/': typeof SocialIndexRoute
 }
 export interface FileRoutesByTo {
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
+  '/social/$handle': typeof SocialHandleRoute
   '/social': typeof SocialIndexRoute
 }
 export interface FileRoutesById {
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/api/places': typeof ApiPlacesRoute
   '/api/trains': typeof ApiTrainsRoute
   '/sitemap/xml': typeof SitemapXmlRoute
+  '/social/$handle': typeof SocialHandleRoute
   '/social/': typeof SocialIndexRoute
 }
 export interface FileRouteTypes {
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
+    | '/social/$handle'
     | '/social/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
+    | '/social/$handle'
     | '/social'
   id:
     | '__root__'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/api/places'
     | '/api/trains'
     | '/sitemap/xml'
+    | '/social/$handle'
     | '/social/'
   fileRoutesById: FileRoutesById
 }
@@ -222,6 +234,7 @@ export interface RootRouteChildren {
   ApiPlacesRoute: typeof ApiPlacesRoute
   ApiTrainsRoute: typeof ApiTrainsRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
+  SocialHandleRoute: typeof SocialHandleRoute
   SocialIndexRoute: typeof SocialIndexRoute
 }
 
@@ -332,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SocialIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/social/$handle': {
+      id: '/social/$handle'
+      path: '/social/$handle'
+      fullPath: '/social/$handle'
+      preLoaderRoute: typeof SocialHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -350,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPlacesRoute: ApiPlacesRoute,
   ApiTrainsRoute: ApiTrainsRoute,
   SitemapXmlRoute: SitemapXmlRoute,
+  SocialHandleRoute: SocialHandleRoute,
   SocialIndexRoute: SocialIndexRoute,
 }
 export const routeTree = rootRouteImport
