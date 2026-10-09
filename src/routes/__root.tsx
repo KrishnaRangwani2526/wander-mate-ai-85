@@ -8,7 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, Compass, ArrowUpRight } from "lucide-react";
+import { Menu, X, Compass, ArrowUpRight, Home, Sparkles, CalendarDays, Users, User } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -324,12 +324,43 @@ function SiteFooter() {
   );
 }
 
+const TABS = [
+  { to: "/", label: "Home", icon: Home },
+  { to: "/dream", label: "Explore", icon: Sparkles },
+  { to: "/plan", label: "Plan", icon: CalendarDays },
+  { to: "/social", label: "Social", icon: Users },
+  { to: "/auth", label: "Me", icon: User },
+] as const;
+
+function BottomTabs() {
+  return (
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+      <ul className="grid grid-cols-5">
+        {TABS.map((t) => (
+          <li key={t.to}>
+            <Link
+              to={t.to}
+              activeOptions={{ exact: t.to === "/" }}
+              className="flex flex-col items-center gap-0.5 py-2 text-[10.5px] font-medium text-muted-foreground"
+              activeProps={{ className: "flex flex-col items-center gap-0.5 py-2 text-[10.5px] font-semibold text-primary" }}
+            >
+              <t.icon className="h-5 w-5" strokeWidth={1.75} />
+              {t.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background">
+      <div className="flex min-h-screen flex-col bg-background pb-16 md:pb-0">
         <SiteHeader />
+        <BottomTabs />
         <main className="flex-1">
           <Outlet />
         </main>
