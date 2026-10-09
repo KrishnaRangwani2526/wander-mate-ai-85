@@ -47,9 +47,9 @@ function Hero() {
       <img src={heroTaj} alt="" className="absolute inset-0 -z-20 h-full w-full object-cover" />
       <div className="absolute inset-0 -z-10 bg-black/45" />
       <div className="mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end px-5 pb-12 pt-24 text-white md:min-h-[85vh] md:pb-20">
-        <p className="text-sm tracking-wide text-white/80">India, planned with care</p>
-        <h1 className="font-display mt-3 max-w-2xl text-[2.5rem] font-medium leading-[1.08] md:text-6xl">
-          Trips that feel like you planned them with a friend.
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70">India, planned with care</p>
+        <h1 className="font-display mt-3 max-w-2xl text-[2.6rem] font-normal leading-[1.06] md:text-[3.75rem]">
+          Trips that feel like you planned them with a <em>friend</em>.
         </h1>
         <form
           onSubmit={(e) => {
@@ -80,8 +80,11 @@ function Places() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-14 md:py-20">
       <div className="flex items-end justify-between">
-        <h2 className="font-display text-3xl font-medium md:text-4xl">Popular right now</h2>
-        <Link to="/sightsee" className="text-sm text-muted-foreground hover:text-foreground">See all</Link>
+        <div>
+          <p className="eyebrow text-muted-foreground">Where to go</p>
+          <h2 className="font-display mt-1.5 text-3xl md:text-4xl">Popular right now</h2>
+        </div>
+        <Link to="/sightsee" className="pb-1 text-sm text-muted-foreground hover:text-foreground">See all</Link>
       </div>
       <div className="-mx-5 mt-6 flex snap-x gap-3 overflow-x-auto px-5 pb-2 md:mx-0 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:px-0">
         {PLACES.map((p) => (
@@ -105,14 +108,15 @@ function Steps() {
     <section className="border-y border-border bg-secondary/60">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.4fr] md:py-20">
         <div>
-          <h2 className="font-display text-3xl font-medium md:text-4xl">From idea to ticket in three steps</h2>
+          <p className="eyebrow text-muted-foreground">How it works</p>
+          <h2 className="font-display mt-1.5 text-3xl md:text-4xl">From idea to <em>ticket</em> in three steps</h2>
           <img src={heroLadakh} alt="Road through Ladakh" loading="lazy" className="mt-6 hidden aspect-[4/3] w-full rounded-xl object-cover md:block" />
         </div>
         <ol className="divide-y divide-border">
           {STEPS.map((s, i) => (
             <li key={s.to}>
               <Link to={s.to} className="group flex gap-5 py-6">
-                <span className="font-display text-2xl text-primary">{i + 1}</span>
+                <span className="font-display text-2xl font-normal italic text-primary">{i + 1}</span>
                 <span className="flex-1">
                   <span className="block text-lg font-medium">{s.title}</span>
                   <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{s.text}</span>
@@ -130,7 +134,7 @@ function Steps() {
 function Closing() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-16 text-center md:py-24">
-      <h2 className="font-display mx-auto max-w-xl text-3xl font-medium md:text-4xl">See how other travellers do it</h2>
+      <h2 className="font-display mx-auto max-w-xl text-3xl md:text-4xl">See how other <em>travellers</em> do it</h2>
       <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
         Follow local creators, read honest reviews of hotels and cafés, and copy a plan you like.
       </p>

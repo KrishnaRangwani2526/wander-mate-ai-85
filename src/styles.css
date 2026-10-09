@@ -109,7 +109,13 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    letter-spacing: -0.022em;
+  }
+  em, .font-display em {
+    font-style: italic;
+    font-variation-settings: "SOFT" 60;
   }
 }
 
@@ -134,6 +140,15 @@
 }
 @utility shadow-soft { box-shadow: var(--shadow-soft); }
 @utility shadow-card { box-shadow: var(--shadow-card); }
+
+/* Small uppercase label used above section titles */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
 
 /* Legacy aliases (older route files still use these — map them to clean tokens) */
 @utility bg-sunset { background-image: var(--gradient-brand); }
