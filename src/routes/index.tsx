@@ -44,11 +44,6 @@ function Hero() {
   const [q, setQ] = useState("");
   return (
     <section className="relative isolate overflow-hidden">
-      <video
-        className="absolute inset-0 -z-20 h-full w-full object-cover"
-        poster={heroTaj}
-        autoPlay muted loop playsInline preload="none"
-      />
       <img src={heroTaj} alt="" className="absolute inset-0 -z-20 h-full w-full object-cover" />
       <div className="absolute inset-0 -z-10 bg-black/45" />
       <div className="mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end px-5 pb-12 pt-24 text-white md:min-h-[85vh] md:pb-20">
