@@ -1,0 +1,3 @@
+- [x] Budget optimizer guide v2
+- [x] Home redesign: photo-led, warm palette, serif headings, mobile bottom tabs
+- [ ] Other pages restyle (follow-up)
