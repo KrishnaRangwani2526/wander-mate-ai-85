@@ -109,7 +109,13 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    letter-spacing: -0.022em;
+  }
+  em, .font-display em {
+    font-style: italic;
+    font-variation-settings: "SOFT" 60;
   }
 }
 
