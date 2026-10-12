@@ -1,3 +1,6 @@
 - [x] Budget optimizer guide v2
 - [x] Home redesign: photo-led, warm palette, serif headings, mobile bottom tabs
-- [ ] Other pages restyle (follow-up)
+- [ ] Add installable home-screen support and app icon
+- [ ] Make all destination photos publish-safe with bundled fallbacks
+- [ ] Simplify shared navigation and harmonize remaining page layouts
+- [ ] Check the preview and published-asset build output
