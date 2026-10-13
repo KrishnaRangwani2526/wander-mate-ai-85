@@ -4,6 +4,8 @@ import { Heart, MessageCircle, MapPin, BadgeCheck, Play } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { toggleLike, timeAgo, compact, type Post } from "@/lib/social";
 import { Comments } from "./Comments";
+import { SafeImage } from "@/components/SafeImage";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export function PostCard({
   post,
@@ -40,9 +42,10 @@ export function PostCard({
     <article className="overflow-hidden rounded-3xl border border-border bg-background shadow-card">
       <div className="flex items-center gap-3 px-4 py-3">
         <Link to="/social/$handle" params={{ handle: c?.handle ?? "" }} className="shrink-0">
-          <img
+          <SafeImage
             src={c?.avatar_url ?? ""}
             alt={c?.name ?? "creator"}
+            fallbackSrc={getDestinationImage(c?.name ?? "Udaipur")}
             loading="lazy"
             className="h-9 w-9 rounded-full object-cover ring-2 ring-brand/40"
           />
@@ -68,9 +71,10 @@ export function PostCard({
       </div>
 
       <Link to="/social/p/$id" params={{ id: post.id }} className="block bg-secondary/40">
-        <img
+        <SafeImage
           src={post.media_url}
           alt={post.caption ?? "travel post"}
+          fallbackSrc={getDestinationImage(`${post.place_name ?? "Udaipur"} ${post.caption ?? ""}`)}
           loading="lazy"
           className={`w-full object-cover ${post.kind === "reel" ? "aspect-[4/5]" : "aspect-square"}`}
         />

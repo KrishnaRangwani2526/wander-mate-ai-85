@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { DESTINATIONS, INTEREST_LABELS } from "@/data/destinations";
 import { Camera, Search, ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { SafeImage } from "@/components/SafeImage";
 
 export const Route = createFileRoute("/sightsee")({
   head: () => ({
@@ -89,8 +90,9 @@ function SightseePage() {
               className="group relative overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition hover:-translate-y-0.5 hover:shadow-card"
             >
               <div className="relative aspect-[4/5] overflow-hidden">
-                <img
+                <SafeImage
                   src={d.hero_image}
+                  fallbackSrc={d.hero_image}
                   alt={d.name}
                   loading="lazy"
                   decoding="async"

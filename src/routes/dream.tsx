@@ -261,7 +261,7 @@ function SmartImg({ src, alt, className }: { src: string; alt: string; className
   const [err, setErr] = useState(false);
   if (err) {
     return (
-      <div className={`${className} grid place-items-center bg-gradient-to-br from-indigo-100 via-pink-100 to-amber-100 text-foreground/40`}>
+      <div className={`${className} grid place-items-center bg-secondary text-muted-foreground`}>
         <ImageIcon className="h-8 w-8" />
       </div>
     );
@@ -381,10 +381,10 @@ function AiCard({ r }: { r: DreamResultItem }) {
     window.dispatchEvent(new CustomEvent("wc:chat:ask", { detail: { prompt: `Tell me about ${r.name}, ${r.state} — famous places, best season, food, sample plan.` } }));
   }
   return (
-    <article className="overflow-hidden rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50/40 to-white shadow-soft">
+    <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
       <div className="relative h-36">
         <SmartImg src={fallbackHero(`${r.name} ${r.state}`)} alt={r.name} className="h-full w-full object-cover" />
-        <span className="absolute left-3 top-3 rounded-full bg-indigo-600 px-2 py-0.5 text-xs font-bold text-white">AI pick</span>
+        <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2 py-0.5 text-xs font-semibold text-foreground">AI pick</span>
       </div>
       <div className="p-4">
         <div className="flex items-baseline justify-between">
@@ -398,8 +398,8 @@ function AiCard({ r }: { r: DreamResultItem }) {
         <div className="mt-3 flex items-baseline justify-between border-t border-border pt-3">
           <span className="text-sm font-semibold">₹{(r.estimated_cost_inr || 0).toLocaleString("en-IN")}</span>
           <div className="flex gap-1.5">
-            <button onClick={ask} className="rounded-full border border-indigo-200 px-2 py-1 text-[11px] font-semibold text-indigo-700 hover:bg-indigo-50">Ask AI</button>
-            <button onClick={plan} className="inline-flex items-center gap-1 rounded-full bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:opacity-90">Plan <ArrowRight className="h-3 w-3" /></button>
+            <button onClick={ask} className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold text-foreground hover:bg-secondary">Ask AI</button>
+            <button onClick={plan} className="inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[11px] font-semibold text-background hover:opacity-90">Plan <ArrowRight className="h-3 w-3" /></button>
           </div>
         </div>
       </div>

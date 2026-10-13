@@ -14,6 +14,8 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { PostCard } from "@/components/social/PostCard";
 import { StoryViewer } from "@/components/social/StoryViewer";
+import { SafeImage } from "@/components/SafeImage";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export const Route = createFileRoute("/social/")({
   head: () => ({
@@ -108,8 +110,9 @@ function SocialFeed() {
           {stories.map((s, i) => (
             <button key={s.id} onClick={() => setStoryAt(i)} className="w-16 shrink-0 text-center">
               <span className="block rounded-full bg-gradient-to-tr from-rose-500 via-orange-400 to-amber-300 p-[2px]">
-                <img
+                <SafeImage
                   src={s.creator?.avatar_url ?? ""}
+                  fallbackSrc={getDestinationImage(s.creator?.city ?? "Udaipur")}
                   alt={s.creator?.name ?? "story"}
                   loading="lazy"
                   className="h-16 w-16 rounded-full border-2 border-background object-cover"
@@ -201,7 +204,7 @@ function CreatorRow({ c }: { c: Creator }) {
       params={{ handle: c.handle }}
       className="flex items-center gap-3 rounded-xl px-1 py-1 hover:bg-secondary"
     >
-      <img src={c.avatar_url ?? ""} alt={c.name} loading="lazy" className="h-9 w-9 rounded-full object-cover" />
+      <SafeImage src={c.avatar_url ?? ""} fallbackSrc={getDestinationImage(c.city ?? "Udaipur")} alt={c.name} loading="lazy" className="h-9 w-9 rounded-full object-cover" />
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-1 text-[13px] font-semibold text-foreground">
           <span className="truncate">{c.name}</span>

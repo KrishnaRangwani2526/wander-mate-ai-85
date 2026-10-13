@@ -29,6 +29,8 @@ import {
   type Review,
 } from "@/lib/social";
 import { ReviewBlock } from "@/components/social/ReviewBlock";
+import { SafeImage } from "@/components/SafeImage";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export const Route = createFileRoute("/social/$handle")({
   head: ({ params }) => ({
@@ -125,12 +127,13 @@ function ProfilePage() {
   return (
     <div className="mx-auto w-full max-w-5xl px-4 pb-12">
       <div className="relative -mx-4 h-40 overflow-hidden sm:mx-0 sm:mt-6 sm:h-56 sm:rounded-3xl">
-        <img src={creator.cover_url ?? ""} alt="" className="h-full w-full object-cover" />
+        <SafeImage src={creator.cover_url ?? ""} fallbackSrc={getDestinationImage(creator.city ?? "Udaipur")} alt="" className="h-full w-full object-cover" />
       </div>
 
       <div className="-mt-10 flex flex-col gap-4 sm:flex-row sm:items-end">
-        <img
+        <SafeImage
           src={creator.avatar_url ?? ""}
+          fallbackSrc={getDestinationImage(creator.city ?? "Udaipur")}
           alt={creator.name}
           className="h-24 w-24 rounded-2xl border-4 border-background object-cover shadow-card"
         />
@@ -228,8 +231,9 @@ function ProfilePage() {
               params={{ id: p.id }}
               className="group relative overflow-hidden rounded-2xl bg-secondary"
             >
-              <img
+              <SafeImage
                 src={p.media_url}
+                fallbackSrc={getDestinationImage(`${p.place_name ?? creator.city ?? "Udaipur"} ${p.caption ?? ""}`)}
                 alt={p.caption ?? ""}
                 loading="lazy"
                 className="aspect-square w-full object-cover transition group-hover:scale-105"

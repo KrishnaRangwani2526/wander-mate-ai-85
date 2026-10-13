@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { X, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { timeAgo, type Post } from "@/lib/social";
+import { SafeImage } from "@/components/SafeImage";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export function StoryViewer({
   stories,
@@ -60,13 +62,13 @@ export function StoryViewer({
           ))}
         </div>
         <div className="mb-3 flex items-center gap-2">
-          <img src={story.creator?.avatar_url ?? ""} alt="" className="h-8 w-8 rounded-full object-cover" />
+          <SafeImage src={story.creator?.avatar_url ?? ""} fallbackSrc={getDestinationImage(story.creator?.city ?? "Udaipur")} alt="" className="h-8 w-8 rounded-full object-cover" />
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-white">@{story.creator?.handle}</p>
             <p className="text-[11px] text-white/70">{timeAgo(story.created_at)} ago</p>
           </div>
         </div>
-        <img src={story.media_url} alt={story.caption ?? "story"} className="aspect-[9/16] w-full rounded-2xl object-cover" />
+        <SafeImage src={story.media_url} fallbackSrc={getDestinationImage(`${story.place_name ?? "Udaipur"} ${story.caption ?? ""}`)} alt={story.caption ?? "story"} className="aspect-[9/16] w-full rounded-2xl object-cover" />
         <p className="mt-3 text-sm text-white/90">{story.caption}</p>
         {story.place_name && (
           <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-white/70">

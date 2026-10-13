@@ -67,10 +67,9 @@
   --accent2: oklch(0.62 0.18 25);             /* coral */
 
   /* Single signature gradient (used sparingly: hero word, primary CTA, accent rule) */
-  --gradient-brand: linear-gradient(120deg, oklch(0.6 0.14 200) 0%, oklch(0.55 0.16 270) 50%, oklch(0.65 0.18 25) 100%);
-  --gradient-brand-soft: linear-gradient(120deg, oklch(0.97 0.03 200) 0%, oklch(0.97 0.03 270) 50%, oklch(0.97 0.03 25) 100%);
-  --gradient-hero: radial-gradient(1200px 600px at 80% -10%, oklch(0.95 0.05 200 / 60%), transparent 60%),
-                   radial-gradient(900px 500px at -10% 10%, oklch(0.96 0.04 25 / 50%), transparent 60%);
+  --gradient-brand: linear-gradient(120deg, var(--primary), var(--primary));
+  --gradient-brand-soft: linear-gradient(120deg, var(--secondary), var(--secondary));
+  --gradient-hero: none;
 
   --shadow-soft: 0 1px 2px oklch(0.18 0.02 250 / 4%), 0 4px 16px -8px oklch(0.18 0.02 250 / 8%);
   --shadow-card: 0 2px 4px oklch(0.18 0.02 250 / 4%), 0 12px 32px -12px oklch(0.18 0.02 250 / 12%);
@@ -130,10 +129,7 @@
   background-image: var(--gradient-hero);
 }
 @utility text-brand-gradient {
-  background-image: var(--gradient-brand);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--primary);
 }
 @utility ring-brand {
   box-shadow: var(--shadow-glow);

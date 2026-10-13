@@ -167,9 +167,7 @@ function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:py-4 md:flex md:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2.5">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-foreground text-background shadow-soft">
-            <Compass className="h-4.5 w-4.5" strokeWidth={2.25} />
-          </span>
+          <img src="/icon-192.png" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-full object-cover" />
           <span className="truncate font-display text-[17px] font-bold tracking-tight text-foreground">
             WanderCompanion
           </span>
