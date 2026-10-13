@@ -74,7 +74,11 @@ function pickKnownCity(fragment: string) {
 function extractRoute(text: string) {
   const iata = text.match(/\b([A-Z]{3})\s*(?:to|->|→|-)\s*([A-Z]{3})\b/);
   if (iata) return { origin: iata[1].toUpperCase(), destination: iata[2].toUpperCase() };
-  const clean = text.toLowerCase().replace(/[^a-z\s>-]/g, " ").replace(/\s+/g, " ").trim();
+  const clean = text
+    .toLowerCase()
+    .replace(/[^a-z\s>-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   const match =
     clean.match(/\bfrom\s+([a-z ]{2,35}?)\s+(?:to|->)\s+([a-z ]{2,35}?)(?:\s|$)/) ||
     clean.match(/\b([a-z ]{2,35}?)\s+(?:to|->)\s+([a-z ]{2,35}?)(?:\s|$)/);
@@ -126,7 +130,9 @@ async function getLiveContext(text: string) {
               wxJson.daily?.temperature_2m_max ?? []
             )
               .slice(0, 5)
-              .join("/")}°C, min ${(wxJson.daily?.temperature_2m_min ?? []).slice(0, 5).join("/")}°C, rain ${(
+              .join(
+                "/",
+              )}°C, min ${(wxJson.daily?.temperature_2m_min ?? []).slice(0, 5).join("/")}°C, rain ${(
               wxJson.daily?.precipitation_sum ?? []
             )
               .slice(0, 5)
@@ -141,7 +147,7 @@ async function getLiveContext(text: string) {
   return bits.join("\n");
 }
 
-async function askLovableAi(apiKey: string, messages: ChatMessage[], liveContext: string) {
+async function askTravelAi(apiKey: string, messages: ChatMessage[], liveContext: string) {
   const history = messages.slice(-12).map((m) => ({
     role: m.role === "assistant" ? "assistant" : "user",
     content: m.content || "",
@@ -168,7 +174,8 @@ async function askLovableAi(apiKey: string, messages: ChatMessage[], liveContext
   });
 
   const payload: any = await res.json().catch(() => ({}));
-  if (res.status === 429) throw new Error("I'm getting a lot of questions right now — try again in a moment.");
+  if (res.status === 429)
+    throw new Error("I'm getting a lot of questions right now — try again in a moment.");
   if (res.status === 402) throw new Error("The AI usage limit for this workspace has run out.");
   if (!res.ok) throw new Error(payload?.error?.message || `AI service returned ${res.status}`);
   const text = payload?.choices?.[0]?.message?.content?.trim();
@@ -180,19 +187,21 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env["LOVABLE_API_KEY"];
-        if (!apiKey) return json({ text: "AI is not configured for this project yet." }, { status: 503 });
+        const apiKey = process.env["TRAVEL_AI_API_KEY"] || process.env["LOVABLE_API_KEY"];
+        if (!apiKey)
+          return json({ text: "AI is not configured for this project yet." }, { status: 503 });
 
         const body: any = await request.json().catch(() => ({}));
         const messages: ChatMessage[] = Array.isArray(body?.messages) ? body.messages : [];
-        if (!messages.length) return json({ text: "Ask me anything about your trip to get started." });
+        if (!messages.length)
+          return json({ text: "Ask me anything about your trip to get started." });
 
         const latest = messages[messages.length - 1]?.content || "";
         const liveContext = await getLiveContext(latest);
 
         try {
-          const text = await askLovableAi(apiKey, messages, liveContext);
-          return json({ text, source: "lovable_ai" });
+          const text = await askTravelAi(apiKey, messages, liveContext);
+          return json({ text, source: "ai_gateway" });
         } catch (error) {
           const detail = error instanceof Error ? error.message : String(error);
           return json({ text: `⚠️ ${detail}` }, { status: 502 });

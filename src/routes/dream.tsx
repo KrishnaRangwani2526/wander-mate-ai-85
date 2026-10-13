@@ -1,7 +1,15 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Sparkles, Loader2, MapPin, Star, ArrowRight, MessageSquare, ImageIcon } from "lucide-react";
+import {
+  Sparkles,
+  Loader2,
+  MapPin,
+  Star,
+  ArrowRight,
+  MessageSquare,
+  ImageIcon,
+} from "lucide-react";
 import {
   INTEREST_LABELS,
   SEASON_LABELS,
@@ -17,7 +25,11 @@ export const Route = createFileRoute("/dream")({
   head: () => ({
     meta: [
       { title: "Dream — Discover India by your mood | WanderCompanion" },
-      { name: "description", content: "Pick interests, duration, season and budget. Get destinations that actually match — plus AI suggestions for anything off-list." },
+      {
+        name: "description",
+        content:
+          "Pick interests, duration, season and budget. Get destinations that actually match — plus AI suggestions for anything off-list.",
+      },
     ],
   }),
   component: DreamPage,
@@ -57,7 +69,9 @@ function DreamPage() {
   const [maxBudget, setMaxBudget] = useState<number>(saved?.max_budget_per_day_inr || 0);
   const [avoidCrowds, setAvoidCrowds] = useState<boolean>(saved?.avoid_crowds || false);
   const [style, setStyle] = useState<string>(saved?.style || "mid");
-  const [cached, setCached] = useState<DreamResultItem[] | null>(() => getTrip().dreamResults || null);
+  const [cached, setCached] = useState<DreamResultItem[] | null>(
+    () => getTrip().dreamResults || null,
+  );
   const [aiExtra, setAiExtra] = useState<DreamResultItem[]>([]);
   const [aiBusy, setAiBusy] = useState(false);
 
@@ -78,9 +92,15 @@ function DreamPage() {
   async function fetchAiSuggestions(req: any) {
     setAiBusy(true);
     try {
-      const interestsTxt = (req.interests || []).map((i: string) => INTEREST_LABELS[i as Interest] || i).join(", ");
-      const seasonsTxt = (req.seasons || []).map((s: string) => SEASON_LABELS[s as Season] || s).join(", ") || "any season";
-      const budgetTxt = req.max_budget_per_day_inr ? `under ₹${req.max_budget_per_day_inr}/day per person` : "any budget";
+      const interestsTxt = (req.interests || [])
+        .map((i: string) => INTEREST_LABELS[i as Interest] || i)
+        .join(", ");
+      const seasonsTxt =
+        (req.seasons || []).map((s: string) => SEASON_LABELS[s as Season] || s).join(", ") ||
+        "any season";
+      const budgetTxt = req.max_budget_per_day_inr
+        ? `under ₹${req.max_budget_per_day_inr}/day per person`
+        : "any budget";
       const prompt = `Suggest 6 specific real-world travel destinations (India or international) matching: interests=${interestsTxt}; season=${seasonsTxt}; ${budgetTxt}; trip length ${req.duration_days || 5} days.
 
 Return STRICT JSON array, no prose, no markdown fences. Each item:
@@ -91,7 +111,9 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
         body: JSON.stringify({ messages: [{ role: "user", content: prompt }] }),
       });
       const data = await res.json();
-      const raw = String(data.text || "").replace(/```json|```/g, "").trim();
+      const raw = String(data.text || "")
+        .replace(/```json|```/g, "")
+        .trim();
       const start = raw.indexOf("[");
       const end = raw.lastIndexOf("]");
       if (start >= 0 && end > start) {
@@ -136,16 +158,27 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
       <PageHero
         eyebrow="Step 01 · Dream"
         icon={<Sparkles className="h-3.5 w-3.5" />}
-        title={<>What does your trip <span className="text-brand-gradient">feel like?</span></>}
+        title={
+          <>
+            What does your trip <span className="text-brand-gradient">feel like?</span>
+          </>
+        }
         description="Filters are real — pick beaches and you get beaches. If the curated list is thin, AI fills in real-world picks within your budget."
       />
 
       <section className="mx-auto max-w-5xl px-4 py-8">
-        <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-5 shadow-soft sm:p-7">
+        <form
+          onSubmit={onSubmit}
+          className="rounded-2xl border border-border bg-card p-5 shadow-soft sm:p-7"
+        >
           <Field label="I'm into…" hint="Hard filter — only destinations matching ≥1 will show">
             <div className="flex flex-wrap gap-2">
               {INTERESTS.map((i) => (
-                <Chip key={i} active={interests.includes(i)} onClick={() => toggle(interests, i, setInterests)}>
+                <Chip
+                  key={i}
+                  active={interests.includes(i)}
+                  onClick={() => toggle(interests, i, setInterests)}
+                >
                   {INTEREST_LABELS[i]}
                 </Chip>
               ))}
@@ -155,7 +188,11 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
           <Field label="Best months" hint="Optional hard filter">
             <div className="flex flex-wrap gap-2">
               {SEASONS.map((s) => (
-                <Chip key={s} active={seasons.includes(s)} onClick={() => toggle(seasons, s, setSeasons)}>
+                <Chip
+                  key={s}
+                  active={seasons.includes(s)}
+                  onClick={() => toggle(seasons, s, setSeasons)}
+                >
                   {SEASON_LABELS[s]}
                 </Chip>
               ))}
@@ -164,13 +201,31 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             <Field label={`Days: ${days}`}>
-              <input type="range" min={1} max={20} value={days} onChange={(e) => setDays(+e.target.value)} className="w-full accent-[var(--brand)]" />
+              <input
+                type="range"
+                min={1}
+                max={20}
+                value={days}
+                onChange={(e) => setDays(+e.target.value)}
+                className="w-full accent-[var(--brand)]"
+              />
             </Field>
             <Field label={`Travelers: ${travelers}`}>
-              <input type="range" min={1} max={10} value={travelers} onChange={(e) => setTravelers(+e.target.value)} className="w-full accent-[var(--brand)]" />
+              <input
+                type="range"
+                min={1}
+                max={10}
+                value={travelers}
+                onChange={(e) => setTravelers(+e.target.value)}
+                className="w-full accent-[var(--brand)]"
+              />
             </Field>
             <Field label="Travel style">
-              <select value={style} onChange={(e) => setStyle(e.target.value)} className={selectCls}>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className={selectCls}
+              >
                 <option value="shoestring">Shoestring</option>
                 <option value="budget">Budget</option>
                 <option value="mid">Mid</option>
@@ -179,19 +234,42 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
               </select>
             </Field>
             <Field label="Max ₹/day (0 = any)">
-              <input type="number" min={0} step={500} value={maxBudget} onChange={(e) => setMaxBudget(+e.target.value)} className={selectCls} />
+              <input
+                type="number"
+                min={0}
+                step={500}
+                value={maxBudget}
+                onChange={(e) => setMaxBudget(+e.target.value)}
+                className={selectCls}
+              />
             </Field>
           </div>
 
           <label className="mt-5 flex items-center gap-2 text-sm text-foreground">
-            <input type="checkbox" checked={avoidCrowds} onChange={(e) => setAvoidCrowds(e.target.checked)} className="h-4 w-4 accent-[var(--brand)]" />
+            <input
+              type="checkbox"
+              checked={avoidCrowds}
+              onChange={(e) => setAvoidCrowds(e.target.checked)}
+              className="h-4 w-4 accent-[var(--brand)]"
+            />
             Steer me away from the most touristy places
           </label>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
-            <p className="text-xs text-muted-foreground">Filters: <b className="text-foreground">hard</b> · scoring ranks survivors · AI fills gaps</p>
-            <button type="submit" disabled={mutation.isPending || interests.length === 0} className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background transition hover:opacity-90 disabled:opacity-50">
-              {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            <p className="text-xs text-muted-foreground">
+              Filters: <b className="text-foreground">hard</b> · scoring ranks survivors · AI fills
+              gaps
+            </p>
+            <button
+              type="submit"
+              disabled={mutation.isPending || interests.length === 0}
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background transition hover:opacity-90 disabled:opacity-50"
+            >
+              {mutation.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
               Find my destinations
             </button>
           </div>
@@ -214,12 +292,16 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
         {(aiBusy || aiExtra.length > 0) && (
           <div className="mt-10">
             <div className="mb-3 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-indigo-600" />
-              <h3 className="font-display text-lg font-bold text-foreground">AI-suggested matches</h3>
+              <Sparkles className="h-4 w-4 text-primary" />
+              <h3 className="font-display text-lg font-bold text-foreground">
+                AI-suggested matches
+              </h3>
               {aiBusy && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {aiExtra.map((r) => <AiCard key={r.id} r={r} />)}
+              {aiExtra.map((r) => (
+                <AiCard key={r.id} r={r} />
+              ))}
             </div>
           </div>
         )}
@@ -229,9 +311,18 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
   );
 }
 
-const selectCls = "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20";
+const selectCls =
+  "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20";
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="mb-5">
       <div className="mb-2 flex items-baseline justify-between">
@@ -243,9 +334,23 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
   );
 }
 
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function Chip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
-    <button type="button" onClick={onClick} className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${active ? "border-foreground bg-foreground text-background" : "border-border bg-background text-foreground hover:border-foreground/40 hover:bg-secondary"}`}>{children}</button>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${active ? "border-foreground bg-foreground text-background" : "border-border bg-background text-foreground hover:border-foreground/40 hover:bg-secondary"}`}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -266,7 +371,9 @@ function SmartImg({ src, alt, className }: { src: string; alt: string; className
       </div>
     );
   }
-  return <img src={src} alt={alt} className={className} onError={() => setErr(true)} loading="lazy" />;
+  return (
+    <img src={src} alt={alt} className={className} onError={() => setErr(true)} loading="lazy" />
+  );
 }
 
 function Results({ results }: { results: DreamResultItem[] }) {
@@ -277,52 +384,83 @@ function Results({ results }: { results: DreamResultItem[] }) {
   const topImg = heroFor(top);
 
   function pickAndPlan(r: DreamResultItem) {
-    patchTrip({ selectedDestination: { id: r.id.startsWith("ai-") ? undefined : r.id, name: r.name, state: r.state } });
-    if (r.id.startsWith("ai-")) navigate({ to: "/plan", search: { dest: undefined, name: r.name } as any });
+    patchTrip({
+      selectedDestination: {
+        id: r.id.startsWith("ai-") ? undefined : r.id,
+        name: r.name,
+        state: r.state,
+      },
+    });
+    if (r.id.startsWith("ai-"))
+      navigate({ to: "/plan", search: { dest: undefined, name: r.name } as any });
     else navigate({ to: "/plan", search: { dest: r.id, name: r.name } });
   }
 
   function askAi(r: DreamResultItem) {
-    window.dispatchEvent(new CustomEvent("wc:chat:ask", { detail: { prompt: `Tell me about ${r.name}, ${r.state}: famous places, best season, ideal duration, food, and a sample 5-day plan under ₹${(r.per_person_per_day_inr || 4000) * 5} per person.` } }));
+    window.dispatchEvent(
+      new CustomEvent("wc:chat:ask", {
+        detail: {
+          prompt: `Tell me about ${r.name}, ${r.state}: famous places, best season, ideal duration, food, and a sample 5-day plan under ₹${(r.per_person_per_day_inr || 4000) * 5} per person.`,
+        },
+      }),
+    );
   }
 
   return (
     <div>
       <div className="mb-6 flex items-baseline justify-between">
         <h2 className="font-display text-2xl font-bold sm:text-3xl">Your ranked picks</h2>
-        <span className="text-sm text-muted-foreground">{results.length} matches · showing {1 + rest.length}</span>
+        <span className="text-sm text-muted-foreground">
+          {results.length} matches · showing {1 + rest.length}
+        </span>
       </div>
 
       <article className="mb-8 grid overflow-hidden rounded-2xl border border-border bg-card shadow-card md:grid-cols-[1.2fr_1fr]">
         <div className="relative h-64 md:h-auto">
           <SmartImg src={topImg} alt={top.name} className="h-full w-full object-cover" />
           <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-foreground px-3 py-1 text-xs font-bold text-background">
-            <Star className="h-3 w-3 fill-current" /> Rank #1 {top.ranked ? `· ${Math.round(top.ranked.total_score * 100)}/100` : ""}
+            <Star className="h-3 w-3 fill-current" /> Rank #1{" "}
+            {top.ranked ? `· ${Math.round(top.ranked.total_score * 100)}/100` : ""}
           </span>
         </div>
         <div className="p-6 sm:p-8">
           <div className="text-sm font-medium text-muted-foreground">
-            <MapPin className="mr-1 inline h-3.5 w-3.5" />{top.state}
+            <MapPin className="mr-1 inline h-3.5 w-3.5" />
+            {top.state}
           </div>
           <h3 className="mt-1 font-display text-3xl font-bold tracking-tight">{top.name}</h3>
           <p className="mt-1 text-muted-foreground">{top.tagline}</p>
           {top.ranked && (
-            <p className="mt-3 rounded-lg border border-border bg-brand-soft p-3 text-sm font-medium text-foreground">✨ {top.ranked.verdict}</p>
+            <p className="mt-3 rounded-lg border border-border bg-brand-soft p-3 text-sm font-medium text-foreground">
+              ✨ {top.ranked.verdict}
+            </p>
           )}
           <ul className="mt-4 space-y-1 text-sm text-foreground/80">
-            {(top.reasons || []).map((r) => <li key={r}>· {r}</li>)}
+            {(top.reasons || []).map((r) => (
+              <li key={r}>· {r}</li>
+            ))}
           </ul>
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
             <div>
               <div className="text-xs text-muted-foreground">Estimated trip cost</div>
-              <div className="font-display text-2xl font-bold text-foreground">₹{(top.estimated_cost_inr || 0).toLocaleString("en-IN")}</div>
-              <div className="text-xs text-muted-foreground">~₹{(top.per_person_per_day_inr || 0).toLocaleString("en-IN")} per person / day</div>
+              <div className="font-display text-2xl font-bold text-foreground">
+                ₹{(top.estimated_cost_inr || 0).toLocaleString("en-IN")}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                ~₹{(top.per_person_per_day_inr || 0).toLocaleString("en-IN")} per person / day
+              </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => askAi(top)} className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold hover:bg-secondary">
+              <button
+                onClick={() => askAi(top)}
+                className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold hover:bg-secondary"
+              >
                 <MessageSquare className="h-3.5 w-3.5" /> Ask AI
               </button>
-              <button onClick={() => pickAndPlan(top)} className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-sm font-semibold text-background hover:opacity-90">
+              <button
+                onClick={() => pickAndPlan(top)}
+                className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-sm font-semibold text-background hover:opacity-90"
+              >
                 Plan this trip <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -332,11 +470,16 @@ function Results({ results }: { results: DreamResultItem[] }) {
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {rest.map((r) => (
-          <div key={r.id} className="overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 hover:shadow-card">
+          <div
+            key={r.id}
+            className="overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 hover:shadow-card"
+          >
             <div className="relative h-40">
               <SmartImg src={heroFor(r)} alt={r.name} className="h-full w-full object-cover" />
               {r.ranked && (
-                <span className="absolute left-3 top-3 rounded-full bg-background/95 px-2 py-0.5 text-xs font-bold text-foreground">#{r.ranked.rank} · {Math.round(r.ranked.total_score * 100)}/100</span>
+                <span className="absolute left-3 top-3 rounded-full bg-background/95 px-2 py-0.5 text-xs font-bold text-foreground">
+                  #{r.ranked.rank} · {Math.round(r.ranked.total_score * 100)}/100
+                </span>
               )}
             </div>
             <div className="p-4">
@@ -346,10 +489,22 @@ function Results({ results }: { results: DreamResultItem[] }) {
               </div>
               <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.tagline}</p>
               <div className="mt-3 flex items-baseline justify-between border-t border-border pt-3">
-                <span className="text-sm font-semibold">₹{(r.estimated_cost_inr || 0).toLocaleString("en-IN")}</span>
+                <span className="text-sm font-semibold">
+                  ₹{(r.estimated_cost_inr || 0).toLocaleString("en-IN")}
+                </span>
                 <div className="flex gap-1.5">
-                  <button onClick={() => askAi(r)} className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold hover:bg-secondary">Ask AI</button>
-                  <button onClick={() => pickAndPlan(r)} className="inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[11px] font-semibold text-background hover:opacity-90">Plan <ArrowRight className="h-3 w-3" /></button>
+                  <button
+                    onClick={() => askAi(r)}
+                    className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold hover:bg-secondary"
+                  >
+                    Ask AI
+                  </button>
+                  <button
+                    onClick={() => pickAndPlan(r)}
+                    className="inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[11px] font-semibold text-background hover:opacity-90"
+                  >
+                    Plan <ArrowRight className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -378,13 +533,25 @@ function AiCard({ r }: { r: DreamResultItem }) {
     navigate({ to: "/plan", search: { name: r.name } as any });
   }
   function ask() {
-    window.dispatchEvent(new CustomEvent("wc:chat:ask", { detail: { prompt: `Tell me about ${r.name}, ${r.state} — famous places, best season, food, sample plan.` } }));
+    window.dispatchEvent(
+      new CustomEvent("wc:chat:ask", {
+        detail: {
+          prompt: `Tell me about ${r.name}, ${r.state} — famous places, best season, food, sample plan.`,
+        },
+      }),
+    );
   }
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
       <div className="relative h-36">
-        <SmartImg src={fallbackHero(`${r.name} ${r.state}`)} alt={r.name} className="h-full w-full object-cover" />
-        <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2 py-0.5 text-xs font-semibold text-foreground">AI pick</span>
+        <SmartImg
+          src={fallbackHero(`${r.name} ${r.state}`)}
+          alt={r.name}
+          className="h-full w-full object-cover"
+        />
+        <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2 py-0.5 text-xs font-semibold text-foreground">
+          AI pick
+        </span>
       </div>
       <div className="p-4">
         <div className="flex items-baseline justify-between">
@@ -393,13 +560,27 @@ function AiCard({ r }: { r: DreamResultItem }) {
         </div>
         <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{r.tagline}</p>
         <ul className="mt-2 space-y-0.5 text-xs text-foreground/75">
-          {(r.reasons || []).slice(0, 3).map((x, i) => <li key={i}>· {x}</li>)}
+          {(r.reasons || []).slice(0, 3).map((x, i) => (
+            <li key={i}>· {x}</li>
+          ))}
         </ul>
         <div className="mt-3 flex items-baseline justify-between border-t border-border pt-3">
-          <span className="text-sm font-semibold">₹{(r.estimated_cost_inr || 0).toLocaleString("en-IN")}</span>
+          <span className="text-sm font-semibold">
+            ₹{(r.estimated_cost_inr || 0).toLocaleString("en-IN")}
+          </span>
           <div className="flex gap-1.5">
-            <button onClick={ask} className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold text-foreground hover:bg-secondary">Ask AI</button>
-            <button onClick={plan} className="inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[11px] font-semibold text-background hover:opacity-90">Plan <ArrowRight className="h-3 w-3" /></button>
+            <button
+              onClick={ask}
+              className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold text-foreground hover:bg-secondary"
+            >
+              Ask AI
+            </button>
+            <button
+              onClick={plan}
+              className="inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-[11px] font-semibold text-background hover:opacity-90"
+            >
+              Plan <ArrowRight className="h-3 w-3" />
+            </button>
           </div>
         </div>
       </div>

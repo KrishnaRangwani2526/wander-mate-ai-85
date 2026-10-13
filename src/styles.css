@@ -38,42 +38,42 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  /* Clean white minimalist — travel palette
-     Single brand gradient: teal → indigo → coral, used sparingly */
-  --background: oklch(0.985 0.008 85);        /* warm paper */
-  --foreground: oklch(0.24 0.02 60);          /* warm ink */
+  --radius: 0.875rem;
+  /* Warm paper and forest-green accents echo the WanderCompanion mark. */
+  --background: oklch(0.985 0.008 85);
+  --foreground: oklch(0.24 0.02 60);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.02 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.02 250);
 
-  --primary: oklch(0.52 0.12 40);             /* terracotta */
+  --primary: oklch(0.42 0.085 155);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.955 0.012 80);        /* soft gray surface */
+  --secondary: oklch(0.955 0.018 145);
   --secondary-foreground: oklch(0.22 0.02 250);
-  --muted: oklch(0.955 0.012 80);
+  --muted: oklch(0.955 0.018 145);
   --muted-foreground: oklch(0.5 0.01 245);
-  --accent: oklch(0.94 0.025 70);
+  --accent: oklch(0.94 0.035 95);
   --accent-foreground: oklch(0.22 0.02 250);
   --destructive: oklch(0.6 0.21 27);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.92 0.005 240);
   --input: oklch(0.92 0.005 240);
-  --ring: oklch(0.55 0.13 200);
+  --ring: oklch(0.48 0.09 155);
 
-  --brand: oklch(0.55 0.13 200);              /* teal */
-  --brand-soft: oklch(0.96 0.02 200);
-  --accent2: oklch(0.62 0.18 25);             /* coral */
+  --brand: oklch(0.42 0.085 155);
+  --brand-soft: oklch(0.96 0.02 145);
+  --accent2: oklch(0.62 0.13 45);
 
-  /* Single signature gradient (used sparingly: hero word, primary CTA, accent rule) */
+  /* Use one calm brand accent throughout the travel tools. */
   --gradient-brand: linear-gradient(120deg, var(--primary), var(--primary));
   --gradient-brand-soft: linear-gradient(120deg, var(--secondary), var(--secondary));
   --gradient-hero: none;
 
   --shadow-soft: 0 1px 2px oklch(0.18 0.02 250 / 4%), 0 4px 16px -8px oklch(0.18 0.02 250 / 8%);
   --shadow-card: 0 2px 4px oklch(0.18 0.02 250 / 4%), 0 12px 32px -12px oklch(0.18 0.02 250 / 12%);
-  --shadow-glow: 0 0 0 1px oklch(0.55 0.13 200 / 18%), 0 16px 48px -16px oklch(0.55 0.13 200 / 30%);
+  --shadow-glow:
+    0 0 0 1px oklch(0.42 0.085 155 / 18%), 0 16px 48px -16px oklch(0.42 0.085 155 / 20%);
 }
 
 .dark {
@@ -106,13 +106,34 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4 {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-optical-sizing: auto;
     font-weight: 500;
     letter-spacing: -0.022em;
   }
-  em, .font-display em {
+  em,
+  .font-display em {
     font-style: italic;
     font-variation-settings: "SOFT" 60;
   }
@@ -134,8 +155,12 @@
 @utility ring-brand {
   box-shadow: var(--shadow-glow);
 }
-@utility shadow-soft { box-shadow: var(--shadow-soft); }
-@utility shadow-card { box-shadow: var(--shadow-card); }
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
 
 /* Small uppercase label used above section titles */
 @utility eyebrow {
@@ -147,12 +172,24 @@
 }
 
 /* Legacy aliases (older route files still use these — map them to clean tokens) */
-@utility bg-sunset { background-image: var(--gradient-brand); }
-@utility bg-ocean-grad { background-image: var(--gradient-brand); }
-@utility bg-jungle-grad { background-image: var(--gradient-brand); }
-@utility bg-spice-grad { background-image: var(--gradient-brand); }
-@utility bg-jungle { background-image: var(--gradient-brand); }
-@utility shadow-glass { box-shadow: var(--shadow-soft); }
+@utility bg-sunset {
+  background-image: var(--gradient-brand);
+}
+@utility bg-ocean-grad {
+  background-image: var(--gradient-brand);
+}
+@utility bg-jungle-grad {
+  background-image: var(--gradient-brand);
+}
+@utility bg-spice-grad {
+  background-image: var(--gradient-brand);
+}
+@utility bg-jungle {
+  background-image: var(--gradient-brand);
+}
+@utility shadow-glass {
+  box-shadow: var(--shadow-soft);
+}
 @utility glass {
   background: color-mix(in oklch, white 80%, transparent);
   backdrop-filter: blur(14px) saturate(140%);
@@ -160,8 +197,13 @@
 }
 
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 @utility animate-float {
   animation: float-slow 7s ease-in-out infinite;
@@ -172,13 +214,28 @@
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 @utility animate-marquee {
   animation: marquee 55s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-float, .animate-marquee { animation: none !important; }
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-float,
+  .animate-marquee {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
 }

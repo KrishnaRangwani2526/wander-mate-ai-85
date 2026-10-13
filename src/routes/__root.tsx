@@ -8,7 +8,24 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, Compass, ArrowUpRight, Home, Sparkles, CalendarDays, Users, User } from "lucide-react";
+import {
+  Menu,
+  X,
+  Compass,
+  ArrowUpRight,
+  Binoculars,
+  ChartNoAxesColumnIncreasing,
+  ChevronDown,
+  Home,
+  Sparkles,
+  CalendarDays,
+  MapPinned,
+  Store,
+  Ticket,
+  UsersRound,
+  User,
+  WandSparkles,
+} from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -17,17 +34,16 @@ import { SavedTripsChip } from "../components/SavedTripsChip";
 import { useAuth, signOut } from "../hooks/useAuth";
 import { TripSync } from "../components/TripSync";
 
-
 const NAV = [
-  { to: "/dream", label: "Explore" },
-  { to: "/plan", label: "Plan" },
-  { to: "/optimize", label: "Optimize" },
-  { to: "/travel", label: "Travel" },
-  { to: "/social", label: "Community" },
-  { to: "/analyze", label: "Analyze" },
-  { to: "/sightsee", label: "Sightsee" },
-  { to: "/book", label: "Book" },
-  { to: "/vendors", label: "Local businesses" },
+  { to: "/dream", label: "Explore", icon: Sparkles },
+  { to: "/plan", label: "Plan", icon: CalendarDays },
+  { to: "/optimize", label: "Optimize", icon: WandSparkles },
+  { to: "/travel", label: "Travel", icon: MapPinned },
+  { to: "/social", label: "Community", icon: UsersRound },
+  { to: "/analyze", label: "Analyze", icon: ChartNoAxesColumnIncreasing },
+  { to: "/sightsee", label: "Sightsee", icon: Binoculars },
+  { to: "/book", label: "Book", icon: Ticket },
+  { to: "/vendors", label: "Local businesses", icon: Store },
 ] as const;
 
 const MAIN_NAV = NAV.slice(0, 5);
@@ -162,12 +178,17 @@ function SiteHeader() {
     void signOut();
   };
 
-
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:py-4 md:flex md:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2.5">
-          <img src="/icon-192.png" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-full object-cover" />
+          <img
+            src="/icon-192.png"
+            alt=""
+            width={36}
+            height={36}
+            className="h-9 w-9 shrink-0 rounded-full object-cover"
+          />
           <span className="truncate font-display text-[17px] font-bold tracking-tight text-foreground">
             WanderCompanion
           </span>
@@ -184,6 +205,7 @@ function SiteHeader() {
                   "inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-[13px] font-semibold text-foreground",
               }}
             >
+              <n.icon aria-hidden="true" className="h-4 w-4" />
               {n.label}
             </Link>
           ))}
@@ -194,12 +216,21 @@ function SiteHeader() {
               className="rounded-full px-3 py-1.5 text-[13px] font-medium text-foreground/70 transition hover:bg-secondary hover:text-foreground"
               aria-expanded={moreOpen}
             >
-              More
+              More{" "}
+              <ChevronDown
+                className={`ml-1 inline h-3.5 w-3.5 transition-transform ${moreOpen ? "rotate-180" : ""}`}
+              />
             </button>
             {moreOpen && (
               <div className="absolute right-0 top-full z-50 mt-2 min-w-44 border border-border bg-background p-1 shadow-card">
                 {MORE_NAV.map((n) => (
-                  <Link key={n.to} to={n.to} onClick={() => setMoreOpen(false)} className="block px-3 py-2 text-sm text-foreground/80 hover:bg-secondary">
+                  <Link
+                    key={n.to}
+                    to={n.to}
+                    onClick={() => setMoreOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground"
+                  >
+                    <n.icon aria-hidden="true" className="h-4 w-4 text-primary" />
                     {n.label}
                   </Link>
                 ))}
@@ -213,7 +244,12 @@ function SiteHeader() {
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-end">
                 <span className="text-xs font-bold text-foreground">{displayName}</span>
-                <button onClick={logout} className="text-[10px] font-semibold text-muted-foreground hover:text-foreground">Logout</button>
+                <button
+                  onClick={logout}
+                  className="text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+                >
+                  Logout
+                </button>
               </div>
               <div className="h-8 w-8 rounded-full bg-brand text-background grid place-items-center font-bold text-xs shadow-soft">
                 {displayName[0]?.toUpperCase()}
@@ -230,7 +266,7 @@ function SiteHeader() {
 
           <Link
             to="/dream"
-            className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-[12.5px] font-semibold text-background transition hover:opacity-90"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12.5px] font-semibold text-primary-foreground transition hover:opacity-90"
           >
             Start planning <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
@@ -253,12 +289,13 @@ function SiteHeader() {
                 <Link
                   to={n.to}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-secondary"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground"
                   activeProps={{
                     className:
                       "flex items-center gap-2 rounded-lg bg-secondary px-3 py-2.5 text-sm font-semibold text-foreground",
                   }}
                 >
+                  <n.icon aria-hidden="true" className="h-4 w-4 text-primary" />
                   {n.label}
                 </Link>
               </li>
@@ -288,12 +325,11 @@ function SiteHeader() {
               <Link
                 to="/dream"
                 onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-foreground px-4 py-2.5 text-sm font-semibold text-background"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
               >
                 Start planning <ArrowUpRight className="h-4 w-4" />
               </Link>
             </li>
-
           </ul>
         </nav>
       )}
@@ -313,15 +349,22 @@ function SiteFooter() {
             WanderCompanion
           </div>
           <p className="mt-3 text-muted-foreground">
-            A travel guide and itinerary maker powered by transparent, offline engines. No accounts, no tracking.
+            A travel guide and itinerary maker powered by transparent, offline engines. No accounts,
+            no tracking.
           </p>
         </div>
         <div>
-          <div className="text-xs font-semibold uppercase tracking-wider text-foreground">Explore</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-foreground">
+            Explore
+          </div>
           <ul className="mt-3 space-y-2 text-muted-foreground">
             {NAV.slice(0, 4).map((n) => (
               <li key={n.to}>
-                <Link to={n.to} className="hover:text-foreground">
+                <Link
+                  to={n.to}
+                  className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+                >
+                  <n.icon aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
                   {n.label}
                 </Link>
               </li>
@@ -329,11 +372,17 @@ function SiteFooter() {
           </ul>
         </div>
         <div>
-          <div className="text-xs font-semibold uppercase tracking-wider text-foreground">Trip tools</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-foreground">
+            Trip tools
+          </div>
           <ul className="mt-3 space-y-2 text-muted-foreground">
             {NAV.slice(4).map((n) => (
               <li key={n.to}>
-                <Link to={n.to} className="hover:text-foreground">
+                <Link
+                  to={n.to}
+                  className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+                >
+                  <n.icon aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
                   {n.label}
                 </Link>
               </li>
@@ -352,7 +401,7 @@ const TABS = [
   { to: "/", label: "Home", icon: Home },
   { to: "/dream", label: "Explore", icon: Sparkles },
   { to: "/plan", label: "Plan", icon: CalendarDays },
-  { to: "/social", label: "Social", icon: Users },
+  { to: "/social", label: "Social", icon: UsersRound },
   { to: "/auth", label: "Me", icon: User },
 ] as const;
 
@@ -366,7 +415,10 @@ function BottomTabs() {
               to={t.to}
               activeOptions={{ exact: t.to === "/" }}
               className="flex flex-col items-center gap-0.5 py-2 text-[10.5px] font-medium text-muted-foreground"
-              activeProps={{ className: "flex flex-col items-center gap-0.5 py-2 text-[10.5px] font-semibold text-primary" }}
+              activeProps={{
+                className:
+                  "flex flex-col items-center gap-0.5 py-2 text-[10.5px] font-semibold text-primary",
+              }}
             >
               <t.icon className="h-5 w-5" strokeWidth={1.75} />
               {t.label}
@@ -390,9 +442,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
         <AiChatLauncher />
-        <SavedTripsChip />
         <TripSync />
-
       </div>
     </QueryClientProvider>
   );
