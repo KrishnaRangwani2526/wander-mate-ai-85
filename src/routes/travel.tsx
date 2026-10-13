@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { Navigation, MapPin, Utensils, Camera, Hotel, Loader2, Building2, Bus, Save, Trash2 } from "lucide-react";
 import { DESTINATIONS, type Destination } from "@/data/destinations";
+import { SafeImage } from "@/components/SafeImage";
 import { optimizeRoute } from "@/lib/engines/route";
 import { PageHero } from "@/components/PageHero";
 import { api } from "@/lib/api";
@@ -216,7 +217,7 @@ function TravelPage() {
               {focus && (
                 <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   <div className="relative h-40 overflow-hidden">
-                    <img src={focus.hero_image} alt={focus.name} className="h-full w-full object-cover" />
+                    <SafeImage src={focus.hero_image} fallbackSrc={focus.hero_image} alt={focus.name} className="h-full w-full object-cover" />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-white">
                       <div className="text-[11px] opacity-80"><MapPin className="-mt-0.5 mr-1 inline h-3 w-3" />{focus.state}</div>
                       <h3 className="font-display text-xl font-bold">{focus.name}</h3>

@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { BadgeCheck, MapPin, Star } from "lucide-react";
 import { listCreators, listReviews, type Creator, type Review } from "@/lib/social";
+import { SafeImage } from "@/components/SafeImage";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export const Route = createFileRoute("/vendors")({
   head: () => ({
@@ -56,7 +58,7 @@ function VendorsPage() {
               params={{ handle: v.handle }}
               className="overflow-hidden rounded-2xl border border-border hover:shadow-md"
             >
-              {v.cover_url && <img src={v.cover_url} alt={v.name} className="h-40 w-full object-cover" loading="lazy" />}
+              <SafeImage src={v.cover_url ?? ""} fallbackSrc={getDestinationImage(v.city ?? "Udaipur")} alt={v.name} className="h-40 w-full object-cover" loading="lazy" />
               <div className="p-4">
                 <div className="flex items-center gap-1 font-semibold">
                   {v.name} {v.verified && <BadgeCheck className="h-4 w-4 text-primary" />}

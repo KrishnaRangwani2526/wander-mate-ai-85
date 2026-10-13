@@ -19,16 +19,19 @@ import { TripSync } from "../components/TripSync";
 
 
 const NAV = [
-  { to: "/dream",    label: "Dream",    dot: "bg-pink-500" },
-  { to: "/analyze",  label: "Analyze",  dot: "bg-orange-500" },
-  { to: "/plan",     label: "Plan",     dot: "bg-indigo-500" },
-  { to: "/optimize", label: "Optimize", dot: "bg-emerald-500" },
-  { to: "/sightsee", label: "Sightsee", dot: "bg-rose-500" },
-  { to: "/book",     label: "Book",     dot: "bg-violet-500" },
-  { to: "/travel",   label: "Travel",   dot: "bg-cyan-500" },
-  { to: "/social",   label: "Social",   dot: "bg-fuchsia-500" },
-  { to: "/vendors",  label: "Vendors",  dot: "bg-amber-500" },
+  { to: "/dream", label: "Explore" },
+  { to: "/plan", label: "Plan" },
+  { to: "/optimize", label: "Optimize" },
+  { to: "/travel", label: "Travel" },
+  { to: "/social", label: "Community" },
+  { to: "/analyze", label: "Analyze" },
+  { to: "/sightsee", label: "Sightsee" },
+  { to: "/book", label: "Book" },
+  { to: "/vendors", label: "Local businesses" },
 ] as const;
+
+const MAIN_NAV = NAV.slice(0, 5);
+const MORE_NAV = NAV.slice(5);
 
 function NotFoundComponent() {
   return (
@@ -105,9 +108,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#f8f7f3" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/icon-192.png" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap",
@@ -142,6 +149,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const { user, displayName } = useAuth();
 
   useEffect(() => {
@@ -159,16 +167,14 @@ function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:py-4 md:flex md:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2.5">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-foreground text-background shadow-soft">
-            <Compass className="h-4.5 w-4.5" strokeWidth={2.25} />
-          </span>
+          <img src="/icon-192.png" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-full object-cover" />
           <span className="truncate font-display text-[17px] font-bold tracking-tight text-foreground">
             WanderCompanion
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-0.5 md:flex">
-          {NAV.map((n) => (
+        <nav className="hidden items-center gap-0.5 lg:flex">
+          {MAIN_NAV.map((n) => (
             <Link
               key={n.to}
               to={n.to}
@@ -178,10 +184,28 @@ function SiteHeader() {
                   "inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-[13px] font-semibold text-foreground",
               }}
             >
-              <span className={`h-1.5 w-1.5 rounded-full ${n.dot}`} />
               {n.label}
             </Link>
           ))}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setMoreOpen((value) => !value)}
+              className="rounded-full px-3 py-1.5 text-[13px] font-medium text-foreground/70 transition hover:bg-secondary hover:text-foreground"
+              aria-expanded={moreOpen}
+            >
+              More
+            </button>
+            {moreOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 min-w-44 border border-border bg-background p-1 shadow-card">
+                {MORE_NAV.map((n) => (
+                  <Link key={n.to} to={n.to} onClick={() => setMoreOpen(false)} className="block px-3 py-2 text-sm text-foreground/80 hover:bg-secondary">
+                    {n.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="hidden items-center gap-4 md:flex">
@@ -215,14 +239,14 @@ function SiteHeader() {
         <button
           aria-label="Toggle menu"
           onClick={() => setOpen((o) => !o)}
-          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border text-foreground md:hidden"
+          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border text-foreground lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open && (
-        <nav className="border-t border-border bg-background md:hidden">
+        <nav className="border-t border-border bg-background lg:hidden">
           <ul className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {NAV.map((n) => (
               <li key={n.to}>
@@ -235,7 +259,6 @@ function SiteHeader() {
                       "flex items-center gap-2 rounded-lg bg-secondary px-3 py-2.5 text-sm font-semibold text-foreground",
                   }}
                 >
-                  <span className={`h-2 w-2 rounded-full ${n.dot}`} />
                   {n.label}
                 </Link>
               </li>
