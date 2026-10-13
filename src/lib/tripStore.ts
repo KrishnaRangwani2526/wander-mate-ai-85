@@ -3,6 +3,7 @@
  * Pages read/write so Dream → Plan → Optimize → Book → Travel keeps context.
  */
 import { useEffect, useState } from "react";
+import { getDestinationImage } from "@/lib/destination-image";
 
 const KEY = "wc.trip.v1";
 
@@ -62,6 +63,5 @@ export function useTrip(): [TripState, (p: Partial<TripState>) => void] {
 
 /** Best-effort fallback hero image keyed by destination slug. */
 export function fallbackHero(name: string): string {
-  const q = encodeURIComponent(name.replace(/[^\w\s]/g, " ").trim().split(/\s+/).join(","));
-  return `https://loremflickr.com/800/500/${q},travel?lock=${name.length}`;
+  return getDestinationImage(name);
 }

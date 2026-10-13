@@ -1,6 +1,7 @@
 // Extended destination catalogue: 40+ additional Indian destinations and 12
 // international trips. Kept in a separate module so the core file stays readable.
 import type { Destination, Interest, Season } from "./destinations";
+import { getDestinationImage } from "@/lib/destination-image";
 
 type Seed = {
   id: string;
@@ -37,9 +38,7 @@ const mk = (s: Seed): Destination => ({
   cost_per_day_inr: s.cost_per_day_inr,
   nearest_airport_iata: s.nearest_airport_iata,
   nearest_railhead: s.nearest_railhead ?? "—",
-  hero_image: `https://loremflickr.com/1200/700/${encodeURIComponent(
-    `${s.name},${s.country ?? "India"},travel`,
-  )}?lock=${s.id.length * 7 + s.name.length}`,
+  hero_image: getDestinationImage(`${s.name} ${s.state} ${s.country ?? ""}`),
   highlights: s.highlights,
   famous_food: s.famous_food,
   lat: s.lat,

@@ -3,6 +3,7 @@
 // Costs are INR per person per day at "mid" travel style.
 
 import { EXTRA_DESTINATIONS } from "./destinations.extra";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export type Interest =
   | "mountains"
@@ -465,7 +466,10 @@ const BASE_DESTINATIONS: Destination[] = [
   },
 ];
 
-export const DESTINATIONS: Destination[] = [...BASE_DESTINATIONS, ...EXTRA_DESTINATIONS];
+export const DESTINATIONS: Destination[] = [...BASE_DESTINATIONS, ...EXTRA_DESTINATIONS].map((destination) => ({
+  ...destination,
+  hero_image: getDestinationImage(`${destination.id} ${destination.name} ${destination.state}`),
+}));
 
 export const INTEREST_LABELS: Record<Interest, string> = {
   mountains: "Mountains",
