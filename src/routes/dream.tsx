@@ -20,6 +20,10 @@ export const Route = createFileRoute("/dream")({
     meta: [
       { title: "Dream — Discover India by your mood | WanderCompanion" },
       { name: "description", content: "Pick interests, duration, season and budget. Get destinations that actually match — plus AI suggestions for anything off-list." },
+      { property: "og:title", content: "Explore destinations by mood | WanderCompanion" },
+      { property: "og:description", content: "Find places that match your interests, travel season and budget." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: DreamPage,
