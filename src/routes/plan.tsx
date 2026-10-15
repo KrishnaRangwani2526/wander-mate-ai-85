@@ -24,9 +24,9 @@ export const Route = createFileRoute("/plan")({
 });
 
 const PACE_TINT: Record<string, string> = {
-  easy: "bg-emerald-100 text-emerald-800 border-emerald-200",
-  balanced: "bg-sky-100 text-sky-800 border-sky-200",
-  packed: "bg-amber-100 text-amber-800 border-amber-200",
+  easy: "bg-secondary text-foreground border-border",
+  balanced: "bg-secondary text-foreground border-border",
+  packed: "bg-secondary text-foreground border-border",
 };
 
 export const HUBS: { code: string; label: string }[] = [
@@ -193,7 +193,7 @@ function PlanPage() {
       <section className="mx-auto max-w-7xl px-4 pb-16">
         {nameFromSearch && !resolvedFromName && (
           <div className="mb-4 rounded-xl border border-indigo-200 bg-indigo-50/50 p-4 text-sm">
-            <b className="text-indigo-900">{nameFromSearch}</b> isn't in the curated dataset. We mapped you to <b>{dest.name}</b> for engine planning — for an AI-tailored itinerary of <b>{nameFromSearch}</b> specifically, click "Ask AI" below.
+            <b className="text-foreground">{nameFromSearch}</b> isn't in the curated dataset. We mapped you to <b>{dest.name}</b> for engine planning — for an AI-tailored itinerary of <b>{nameFromSearch}</b> specifically, click "Ask AI" below.
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("wc:chat:ask", { detail: { prompt: `Build a detailed ${days}-day itinerary for ${nameFromSearch} for ${travelers} travelers, ${style} style, budget ₹${budget || 80000}. Day-by-day with morning/afternoon/evening, food picks, costs in ₹, and total budget split.` } }))}
               className="ml-2 inline-flex items-center gap-1 rounded-full bg-indigo-600 px-3 py-1 text-xs font-semibold text-white hover:opacity-90"
@@ -362,17 +362,17 @@ function AiTips({ destination }: { destination: string }) {
   }, [destination]);
 
   return (
-    <div className="mb-8 rounded-2xl border border-indigo-100 bg-indigo-50/30 p-6">
+    <div className="mb-8 rounded-2xl border border-border bg-secondary/50 p-6">
       <div className="mb-4 flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-indigo-600" />
-        <h3 className="font-display text-lg font-bold text-indigo-900">AI Local Tips & Insights</h3>
+        <Sparkles className="h-5 w-5 text-primary" />
+        <h3 className="font-display text-lg font-bold text-foreground">AI Local Tips & Insights</h3>
       </div>
       {loading ? (
-        <div className="flex items-center gap-2 text-sm text-indigo-600/70">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Gathering local wisdom...
         </div>
       ) : (
-        <div className="prose prose-sm prose-indigo max-w-none text-indigo-900/80">
+        <div className="prose prose-sm max-w-none text-foreground/80">
           {tips ? (
             <div className="grid gap-4 md:grid-cols-2">
               <div className="markdown-content">

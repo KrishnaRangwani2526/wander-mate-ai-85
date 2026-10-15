@@ -394,7 +394,7 @@ function OptimizePage() {
                 <span className="flex items-center gap-1 font-semibold text-foreground">
                   <Wallet className="h-3 w-3" /> ₹{totalCost.toLocaleString("en-IN")} / ₹{budget.toLocaleString("en-IN")}
                 </span>
-                <span className={`font-bold ${over ? "text-destructive" : "text-emerald-700"}`}>
+                <span className={`font-bold ${over ? "text-destructive" : "text-foreground"}`}>
                   {over ? `+₹${(totalCost - budget).toLocaleString("en-IN")} over` : `₹${(budget - totalCost).toLocaleString("en-IN")} left`}
                 </span>
               </div>

@@ -466,22 +466,22 @@ function FlexSearchPanel() {
               <div className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Cheapest fare by day</div>
               {data.results?.length ? <FlexPriceLine data={data.results} /> : <div className="py-6 text-center text-sm text-muted-foreground">No live offers in this window.</div>}
             </div>
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-              <div className="flex items-center gap-2 text-emerald-900">
+            <div className="rounded-xl border border-border bg-secondary p-4">
+              <div className="flex items-center gap-2 text-foreground">
                 <TrendingDown className="h-4 w-4" />
                 <span className="text-xs font-semibold uppercase tracking-wider">AI suggestion</span>
               </div>
               {data.best && (
-                <div className="mt-2 font-display text-2xl font-bold text-emerald-900">
+                <div className="mt-2 font-display text-2xl font-bold text-foreground">
                   ₹{data.best.cheapest_inr?.toLocaleString("en-IN")}
-                  <span className="ml-1 text-xs font-normal text-emerald-900/70">on {data.best.date}</span>
+                  <span className="ml-1 text-xs font-normal text-muted-foreground">on {data.best.date}</span>
                 </div>
               )}
-              <p className="mt-2 text-sm text-emerald-900/85">{data.hint}</p>
+              <p className="mt-2 text-sm text-foreground/85">{data.hint}</p>
               {data.best?.top?.length > 0 && (
-                <div className="mt-3 space-y-1.5 text-xs text-emerald-900/80">
+                <div className="mt-3 space-y-1.5 text-xs text-foreground/80">
                   {data.best.top.slice(0, 3).map((o: any) => (
-                    <div key={o.id} className="flex items-center justify-between border-t border-emerald-200 pt-1.5">
+                    <div key={o.id} className="flex items-center justify-between border-t border-border pt-1.5">
                       <span>{o.airline} {o.flight_number} · {o.stops}stop · ⭐{o.airline_rating}</span>
                       <span className="font-bold">₹{o.price_inr?.toLocaleString("en-IN")}</span>
                     </div>
@@ -653,10 +653,10 @@ function MultiLegPanel({ defaultOrigin, savedDests }: { defaultOrigin: string; s
         </div>
 
         {totalCheapest > 0 && (
-          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-900">
+          <div className="mt-4 rounded-xl border border-border bg-secondary p-3 text-sm text-foreground">
             <b>Cheapest connecting total (1 traveler):</b>{" "}
             <span className="font-display text-lg font-bold">₹{totalCheapest.toLocaleString("en-IN")}</span>
-            <span className="ml-2 text-xs text-emerald-900/70">summed across {legs.length} leg{legs.length > 1 ? "s" : ""} · picks whichever of flight/train is cheaper per leg</span>
+            <span className="ml-2 text-xs text-muted-foreground">summed across {legs.length} leg{legs.length > 1 ? "s" : ""} · picks whichever of flight/train is cheaper per leg</span>
           </div>
         )}
       </div>

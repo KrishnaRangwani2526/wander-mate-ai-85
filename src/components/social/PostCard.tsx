@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Heart, MessageCircle, MapPin, BadgeCheck, Play } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,6 +21,7 @@ export function PostCard({
   const [liked, setLiked] = useState(likedInitially);
   const [count, setCount] = useState(likeCount + post.likes);
   const [showComments, setShowComments] = useState(false);
+  const [liked, setLiked] = useState(likedInitially);
 
   async function onLike() {
     if (!user) return;

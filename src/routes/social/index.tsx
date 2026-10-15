@@ -109,7 +109,7 @@ function SocialFeed() {
         <div className="flex gap-4 overflow-x-auto pb-2">
           {stories.map((s, i) => (
             <button key={s.id} onClick={() => setStoryAt(i)} className="w-16 shrink-0 text-center">
-              <span className="block rounded-full bg-gradient-to-tr from-rose-500 via-orange-400 to-amber-300 p-[2px]">
+              <span className="block rounded-full bg-primary p-[2px]">
                 <SafeImage
                   src={s.creator?.avatar_url ?? ""}
                   fallbackSrc={getDestinationImage(s.creator?.city ?? "Udaipur")}
