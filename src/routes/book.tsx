@@ -115,6 +115,10 @@ export const Route = createFileRoute("/book")({
     meta: [
       { title: "Book — One-click flights, trains, hotels | WanderCompanion" },
       { name: "description", content: "Save your profile once, compare flights, trains and hotels, then book on the official site in one tap." },
+      { property: "og:title", content: "Book travel | WanderCompanion" },
+      { property: "og:description", content: "Compare travel options and continue to trusted booking services." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: BookPage,

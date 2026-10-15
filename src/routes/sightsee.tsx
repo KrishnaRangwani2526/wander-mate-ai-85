@@ -12,6 +12,8 @@ export const Route = createFileRoute("/sightsee")({
       { name: "description", content: "A curated photo gallery of every destination on your list." },
       { property: "og:title", content: "Sightsee — A scenic gallery of India" },
       { property: "og:description", content: "Visual inspiration before you go." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SightseePage,

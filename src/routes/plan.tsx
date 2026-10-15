@@ -18,6 +18,8 @@ export const Route = createFileRoute("/plan")({
       { name: "description", content: "Pick dates, travelers and budget. Get three day-by-day itineraries ranked for you." },
       { property: "og:title", content: "Plan — Build a smart itinerary" },
       { property: "og:description", content: "Three ranked itinerary options under your constraints." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PlanPage,

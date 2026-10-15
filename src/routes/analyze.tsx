@@ -10,6 +10,10 @@ export const Route = createFileRoute("/analyze")({
     meta: [
       { title: "Analyze — Audit any itinerary | WanderCompanion" },
       { name: "description", content: "Paste a URL, PDF or text — Gemini scores it on budget, comfort, exploration and value, and tells you what to swap." },
+      { property: "og:title", content: "Analyze your itinerary | WanderCompanion" },
+      { property: "og:description", content: "Review an itinerary for budget, comfort, exploration and value." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AnalyzePage,
