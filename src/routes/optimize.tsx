@@ -18,6 +18,8 @@ export const Route = createFileRoute("/optimize")({
     { name: "description", content: "Drag real places into each day, auto-order them by distance, set times and meals, and watch the budget live." },
     { property: "og:title", content: "Optimize — Drag-and-drop itinerary builder" },
     { property: "og:description", content: "Real places, distance-ordered days, live budget." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
   ] }),
   validateSearch: (s: Record<string, unknown>): Search => ({
     ids: typeof s.ids === "string" ? s.ids : undefined,
@@ -394,7 +396,7 @@ function OptimizePage() {
                 <span className="flex items-center gap-1 font-semibold text-foreground">
                   <Wallet className="h-3 w-3" /> ₹{totalCost.toLocaleString("en-IN")} / ₹{budget.toLocaleString("en-IN")}
                 </span>
-                <span className={`font-bold ${over ? "text-destructive" : "text-emerald-700"}`}>
+                <span className={`font-bold ${over ? "text-destructive" : "text-foreground"}`}>
                   {over ? `+₹${(totalCost - budget).toLocaleString("en-IN")} over` : `₹${(budget - totalCost).toLocaleString("en-IN")} left`}
                 </span>
               </div>

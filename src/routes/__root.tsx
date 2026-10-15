@@ -208,7 +208,7 @@ function SiteHeader() {
           </div>
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           {user ? (
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-end">

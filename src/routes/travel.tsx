@@ -18,6 +18,10 @@ export const Route = createFileRoute("/travel")({
     meta: [
       { title: "Travel — Live city map & POIs | WanderCompanion" },
       { name: "description", content: "City-focused map with viewpoints, food, hotels and transit. Pick stops, get the shortest route drawn live." },
+      { property: "og:title", content: "Travel map and places | WanderCompanion" },
+      { property: "og:description", content: "Explore viewpoints, food, hotels and transit around your selected city." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   validateSearch: (s: Record<string, unknown>): Search => ({ ids: typeof s.ids === "string" ? s.ids : undefined }),

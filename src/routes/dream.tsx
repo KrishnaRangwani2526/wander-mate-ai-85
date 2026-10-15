@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Sparkles, Loader2, MapPin, Star, ArrowRight, MessageSquare, ImageIcon } from "lucide-react";
+import { Sparkles, Loader2, MapPin, Star, ArrowRight, MessageSquare } from "lucide-react";
 import {
   INTEREST_LABELS,
   SEASON_LABELS,
@@ -12,12 +12,18 @@ import {
 import { api } from "@/lib/api";
 import { PageHero } from "@/components/PageHero";
 import { patchTrip, fallbackHero, getTrip } from "@/lib/tripStore";
+import { SafeImage } from "@/components/SafeImage";
+import { getDestinationImage } from "@/lib/destination-image";
 
 export const Route = createFileRoute("/dream")({
   head: () => ({
     meta: [
       { title: "Dream — Discover India by your mood | WanderCompanion" },
       { name: "description", content: "Pick interests, duration, season and budget. Get destinations that actually match — plus AI suggestions for anything off-list." },
+      { property: "og:title", content: "Explore destinations by mood | WanderCompanion" },
+      { property: "og:description", content: "Find places that match your interests, travel season and budget." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: DreamPage,
@@ -258,15 +264,7 @@ function EmptyHint() {
 }
 
 function SmartImg({ src, alt, className }: { src: string; alt: string; className?: string }) {
-  const [err, setErr] = useState(false);
-  if (err) {
-    return (
-      <div className={`${className} grid place-items-center bg-secondary text-muted-foreground`}>
-        <ImageIcon className="h-8 w-8" />
-      </div>
-    );
-  }
-  return <img src={src} alt={alt} className={className} onError={() => setErr(true)} loading="lazy" />;
+  return <SafeImage src={src} fallbackSrc={getDestinationImage(alt)} alt={alt} className={className} loading="lazy" />;
 }
 
 function Results({ results }: { results: DreamResultItem[] }) {
