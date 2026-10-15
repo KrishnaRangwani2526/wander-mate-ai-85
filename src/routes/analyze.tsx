@@ -27,6 +27,13 @@ export const Route = createFileRoute("/analyze")({
         content:
           "Paste a URL, PDF or text — Gemini scores it on budget, comfort, exploration and value, and tells you what to swap.",
       },
+      { property: "og:title", content: "Analyze your itinerary | WanderCompanion" },
+      {
+        property: "og:description",
+        content: "Review an itinerary for budget, comfort, exploration and value.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AnalyzePage,
@@ -290,21 +297,21 @@ function Output({ r }: { r: any }) {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <h3 className="mb-3 flex items-center gap-2 font-display text-sm font-bold text-emerald-900">
+          <div className="rounded-2xl border border-border bg-secondary p-5">
+            <h3 className="mb-3 flex items-center gap-2 font-display text-sm font-bold text-foreground">
               <ThumbsUp className="h-4 w-4" /> Pros
             </h3>
-            <ul className="space-y-1.5 text-sm text-emerald-900/85">
+            <ul className="space-y-1.5 text-sm text-foreground/85">
               {(r.pros || []).map((p: string, i: number) => (
                 <li key={i}>· {p}</li>
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5">
-            <h3 className="mb-3 flex items-center gap-2 font-display text-sm font-bold text-rose-900">
+          <div className="rounded-2xl border border-border bg-secondary p-5">
+            <h3 className="mb-3 flex items-center gap-2 font-display text-sm font-bold text-foreground">
               <ThumbsDown className="h-4 w-4" /> Cons
             </h3>
-            <ul className="space-y-1.5 text-sm text-rose-900/85">
+            <ul className="space-y-1.5 text-sm text-foreground/85">
               {(r.cons || []).map((p: string, i: number) => (
                 <li key={i}>· {p}</li>
               ))}

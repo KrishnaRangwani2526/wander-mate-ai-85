@@ -34,6 +34,8 @@ export const Route = createFileRoute("/plan")({
         property: "og:description",
         content: "Three ranked itinerary options under your constraints.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PlanPage,

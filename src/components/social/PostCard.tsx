@@ -19,9 +19,9 @@ export function PostCard({
   likedInitially: boolean;
 }) {
   const { user, displayName } = useAuth();
-  const [liked, setLiked] = useState(likedInitially);
   const [count, setCount] = useState(likeCount + post.likes);
   const [showComments, setShowComments] = useState(false);
+  const [liked, setLiked] = useState(likedInitially);
 
   async function onLike() {
     if (!user) return;
