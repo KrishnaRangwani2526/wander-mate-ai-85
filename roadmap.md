@@ -1,6 +1,6 @@
 - [x] Budget optimizer guide v2
 - [x] Home redesign: photo-led, warm palette, serif headings, mobile bottom tabs
-- [ ] Add manifest-only home-screen support and app icon
-- [ ] Make destination and social photos publish-safe with bundled fallbacks
-- [ ] Simplify shared navigation and harmonize remaining page layouts
+- [x] Add manifest-only home-screen support and app icon
+- [x] Make destination and social photos publish-safe with bundled fallbacks
+- [x] Simplify shared navigation and harmonize remaining page layouts
 - [ ] Check the preview and published-asset build output

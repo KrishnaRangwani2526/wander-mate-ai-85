@@ -39,8 +39,7 @@
 
 :root {
   --radius: 0.75rem;
-  /* Clean white minimalist — travel palette
-     Single brand gradient: teal → indigo → coral, used sparingly */
+  /* Restrained travel palette: paper, warm ink and terracotta. */
   --background: oklch(0.985 0.008 85);        /* warm paper */
   --foreground: oklch(0.24 0.02 60);          /* warm ink */
   --card: oklch(1 0 0);
@@ -60,11 +59,11 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.92 0.005 240);
   --input: oklch(0.92 0.005 240);
-  --ring: oklch(0.55 0.13 200);
+  --ring: var(--primary);
 
-  --brand: oklch(0.55 0.13 200);              /* teal */
-  --brand-soft: oklch(0.96 0.02 200);
-  --accent2: oklch(0.62 0.18 25);             /* coral */
+  --brand: var(--primary);
+  --brand-soft: var(--secondary);
+  --accent2: var(--primary);
 
   /* Single signature gradient (used sparingly: hero word, primary CTA, accent rule) */
   --gradient-brand: linear-gradient(120deg, var(--primary), var(--primary));
@@ -83,8 +82,8 @@
   --card-foreground: oklch(0.97 0.005 240);
   --popover: oklch(0.2 0.015 250);
   --popover-foreground: oklch(0.97 0.005 240);
-  --primary: oklch(0.72 0.13 200);
-  --primary-foreground: oklch(0.15 0.02 250);
+  --primary: oklch(0.72 0.13 40);
+  --primary-foreground: oklch(0.15 0.02 60);
   --secondary: oklch(0.24 0.015 250);
   --secondary-foreground: oklch(0.97 0.005 240);
   --muted: oklch(0.24 0.015 250);
@@ -93,7 +92,7 @@
   --accent-foreground: oklch(0.97 0.005 240);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.72 0.13 200);
+  --ring: var(--primary);
 }
 
 @layer base {
