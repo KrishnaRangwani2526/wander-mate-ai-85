@@ -277,7 +277,7 @@ function PlanPage() {
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
             <p className="text-xs text-muted-foreground">
-              Engine: deterministic itinerary + multi-criteria rank.
+              Catalog-trained models personalize places, itinerary order, and budget estimates.
             </p>
             <button
               type="submit"
@@ -456,6 +456,33 @@ function PlanPage() {
                     <span className="rounded-full border border-border bg-secondary px-2.5 py-1 font-medium">
                       {inr(opt.per_person_per_day_inr)}/day/pp
                     </span>
+                  </div>
+
+                  <div className="mt-4 rounded-xl border border-border bg-secondary/40 p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs font-semibold text-foreground">Budget model estimate</p>
+                      <span className="rounded-full bg-background px-2 py-0.5 text-[10px] font-semibold capitalize text-muted-foreground">
+                        {opt.budget_plan.feasibility}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {inr(opt.budget_plan.benchmark_per_person_per_day)}/person/day estimated ·{" "}
+                      {inr(opt.budget_plan.model_estimated_daily_cost_inr)} per person/day before
+                      transit
+                    </p>
+                    <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                      {Object.entries(opt.budget_plan.allocation).map(([category, amount]) => (
+                        <div key={category} className="flex justify-between gap-2 capitalize">
+                          <span>{category.replaceAll("_", " ")}</span>
+                          <span className="font-medium text-foreground">
+                            {inr(amount as number)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-2 text-[10px] text-muted-foreground">
+                      Trained on the destination catalog; actual prices may vary.
+                    </p>
                   </div>
 
                   <ol className="mt-4 space-y-2">

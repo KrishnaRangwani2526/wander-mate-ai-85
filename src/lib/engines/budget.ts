@@ -1,6 +1,9 @@
-// Deterministic budget optimizer — pure TS, unit-testable.
+// Budget optimizer — pure TS and backed by a catalog-trained cost model.
 // Allocates a total trip budget across categories using configurable weights
 // and travel style, then surfaces feasibility + savings tradeoffs.
+
+import { DESTINATIONS } from "@/data/destinations";
+import { predictDestinationDailyCostInr } from "./ml/budget-model";
 
 export type TravelStyle = "shoestring" | "budget" | "mid" | "comfort" | "luxury";
 
@@ -12,6 +15,7 @@ export interface BudgetInput {
   currency?: string;
   style?: TravelStyle;
   has_flight?: boolean; // if false, skip the flights bucket
+  priorities?: Partial<Record<keyof BudgetAllocation, number>>;
 }
 
 export interface BudgetAllocation {
@@ -34,26 +38,60 @@ export interface BudgetResult {
   allocation: BudgetAllocation;
   feasibility: "comfortable" | "tight" | "unrealistic";
   benchmark_per_person_per_day: number;
+  model_estimated_daily_cost_inr: number;
   tradeoffs: string[];
   savings_tips: string[];
 }
 
-// Rough INR-equivalent floors per person per day by style (excluding flights).
-// Used purely for feasibility scoring — not a quote.
-const STYLE_FLOOR_INR: Record<TravelStyle, number> = {
-  shoestring: 1500,
-  budget: 3000,
-  mid: 6000,
-  comfort: 12000,
-  luxury: 25000,
+const STYLE_MULTIPLIER: Record<TravelStyle, number> = {
+  shoestring: 0.55,
+  budget: 0.75,
+  mid: 1,
+  comfort: 1.6,
+  luxury: 2.8,
 };
 
 const WEIGHTS: Record<TravelStyle, BudgetAllocation> = {
-  shoestring: { flights: 0.30, accommodation: 0.20, food: 0.20, activities: 0.15, local_transport: 0.10, misc: 0.05 },
-  budget:     { flights: 0.32, accommodation: 0.22, food: 0.20, activities: 0.15, local_transport: 0.07, misc: 0.04 },
-  mid:        { flights: 0.30, accommodation: 0.28, food: 0.18, activities: 0.15, local_transport: 0.05, misc: 0.04 },
-  comfort:    { flights: 0.28, accommodation: 0.34, food: 0.16, activities: 0.14, local_transport: 0.05, misc: 0.03 },
-  luxury:     { flights: 0.25, accommodation: 0.40, food: 0.15, activities: 0.13, local_transport: 0.04, misc: 0.03 },
+  shoestring: {
+    flights: 0.3,
+    accommodation: 0.2,
+    food: 0.2,
+    activities: 0.15,
+    local_transport: 0.1,
+    misc: 0.05,
+  },
+  budget: {
+    flights: 0.32,
+    accommodation: 0.22,
+    food: 0.2,
+    activities: 0.15,
+    local_transport: 0.07,
+    misc: 0.04,
+  },
+  mid: {
+    flights: 0.3,
+    accommodation: 0.28,
+    food: 0.18,
+    activities: 0.15,
+    local_transport: 0.05,
+    misc: 0.04,
+  },
+  comfort: {
+    flights: 0.28,
+    accommodation: 0.34,
+    food: 0.16,
+    activities: 0.14,
+    local_transport: 0.05,
+    misc: 0.03,
+  },
+  luxury: {
+    flights: 0.25,
+    accommodation: 0.4,
+    food: 0.15,
+    activities: 0.13,
+    local_transport: 0.04,
+    misc: 0.03,
+  },
 };
 
 function normalise(w: BudgetAllocation): BudgetAllocation {
@@ -73,6 +111,17 @@ export function optimizeBudget(input: BudgetInput): BudgetResult {
   const style: TravelStyle = input.style ?? "mid";
 
   let weights: BudgetAllocation = { ...WEIGHTS[style] };
+  if (input.priorities) {
+    for (const key of Object.keys(weights) as (keyof BudgetAllocation)[]) {
+      const priority = input.priorities[key];
+      if (priority != null && Number.isFinite(priority)) {
+        weights[key] *= Math.max(0, priority);
+      }
+    }
+  }
+  if (Object.values(weights).every((weight) => weight === 0)) {
+    weights = { ...WEIGHTS[style] };
+  }
   if (input.has_flight === false) {
     weights.flights = 0;
     weights = normalise(weights);
@@ -87,19 +136,38 @@ export function optimizeBudget(input: BudgetInput): BudgetResult {
     misc: Math.round(total * weights.misc),
   };
 
-  const per_person_per_day = travelers * duration_days
-    ? Math.round(total / (travelers * duration_days))
-    : 0;
+  const per_person_per_day =
+    travelers * duration_days ? Math.round(total / (travelers * duration_days)) : 0;
 
   // Currency-agnostic feasibility: compare per-person/day to style floor
   // expressed in INR. Apply a naive currency multiplier so non-INR budgets
   // map roughly to the same lifestyle band.
-  const fxToInr: Record<string, number> = { INR: 1, USD: 84, EUR: 90, GBP: 105, AED: 23, SGD: 62, JPY: 0.55 };
+  const fxToInr: Record<string, number> = {
+    INR: 1,
+    USD: 84,
+    EUR: 90,
+    GBP: 105,
+    AED: 23,
+    SGD: 62,
+    JPY: 0.55,
+  };
   const ppdInInr = per_person_per_day * (fxToInr[currency] ?? 1);
-  const floor = STYLE_FLOOR_INR[style];
+  const destinationRecord = DESTINATIONS.find(
+    (candidate) =>
+      candidate.id.toLocaleLowerCase() === input.destination.trim().toLocaleLowerCase() ||
+      candidate.name.toLocaleLowerCase() === input.destination.trim().toLocaleLowerCase(),
+  );
+  const modelEstimatedDailyCostInr = predictDestinationDailyCostInr(input.destination);
+  const flightPerDayInr =
+    input.has_flight !== false && destinationRecord
+      ? destinationRecord.approx_flight_inr_from_del / duration_days
+      : 0;
+  const expectedDailyCostInr =
+    modelEstimatedDailyCostInr * STYLE_MULTIPLIER[style] + flightPerDayInr;
+  const benchmarkPerPersonPerDay = Math.round(expectedDailyCostInr / (fxToInr[currency] ?? 1));
   let feasibility: BudgetResult["feasibility"];
-  if (ppdInInr >= floor * 1.2) feasibility = "comfortable";
-  else if (ppdInInr >= floor * 0.75) feasibility = "tight";
+  if (ppdInInr >= expectedDailyCostInr * 1.2) feasibility = "comfortable";
+  else if (ppdInInr >= expectedDailyCostInr * 0.75) feasibility = "tight";
   else feasibility = "unrealistic";
 
   const tradeoffs: string[] = [];
@@ -109,10 +177,14 @@ export function optimizeBudget(input: BudgetInput): BudgetResult {
     );
   }
   if (input.has_flight !== false && allocation.flights < 5000 && currency === "INR") {
-    tradeoffs.push("Flight bucket is small — consider trains, buses, or shifting to nearer destinations.");
+    tradeoffs.push(
+      "Flight bucket is small — consider trains, buses, or shifting to nearer destinations.",
+    );
   }
   if (allocation.activities < total * 0.08) {
-    tradeoffs.push("Activities bucket is thin — book only 1-2 paid experiences and lean on free walking tours/markets.");
+    tradeoffs.push(
+      "Activities bucket is thin — book only 1-2 paid experiences and lean on free walking tours/markets.",
+    );
   }
 
   const savings_tips: string[] = [
@@ -121,7 +193,8 @@ export function optimizeBudget(input: BudgetInput): BudgetResult {
     "Mix one nice dinner per day with breakfast/lunch from bakeries/street food.",
     "Use day passes for metros/buses instead of cabs — typically 40-60% cheaper.",
   ];
-  if (style === "luxury") savings_tips.push("Stay 4-night minimum at boutique hotels for direct-booking perks.");
+  if (style === "luxury")
+    savings_tips.push("Stay 4-night minimum at boutique hotels for direct-booking perks.");
 
   return {
     destination: input.destination,
@@ -133,7 +206,8 @@ export function optimizeBudget(input: BudgetInput): BudgetResult {
     per_person_per_day,
     allocation,
     feasibility,
-    benchmark_per_person_per_day: Math.round(floor / (fxToInr[currency] ?? 1)),
+    benchmark_per_person_per_day: benchmarkPerPersonPerDay,
+    model_estimated_daily_cost_inr: Math.round(expectedDailyCostInr),
     tradeoffs,
     savings_tips,
   };

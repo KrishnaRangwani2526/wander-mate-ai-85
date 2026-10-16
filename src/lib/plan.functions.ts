@@ -43,6 +43,7 @@ export const planTrip = createServerFn({ method: "POST" })
       duration_days: data.duration_days,
       travelers: data.travelers,
       style: data.style,
+      budget_inr: data.budget_inr,
       likes: data.likes,
       dislikes: data.dislikes,
       include_flight: data.include_flight,
@@ -56,7 +57,10 @@ export const planTrip = createServerFn({ method: "POST" })
         dur >= dmin && dur <= dmax ? 1 : Math.max(0, 1 - Math.abs(dur - (dmin + dmax) / 2) / 10);
       const budgetMatch =
         data.budget_inr != null
-          ? Math.max(0, Math.min(1, 1 - Math.max(0, o.cost_inr - data.budget_inr) / data.budget_inr))
+          ? Math.max(
+              0,
+              Math.min(1, 1 - Math.max(0, o.cost_inr - data.budget_inr) / data.budget_inr),
+            )
           : 0.6;
       return {
         id: o.variant,

@@ -11,7 +11,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import {
   Menu,
   X,
-  Compass,
   ArrowUpRight,
   Binoculars,
   ChartNoAxesColumnIncreasing,
@@ -123,6 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Smart, hardcoded travel engines. No subscriptions, no signups.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/binarybees-logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#f8f7f3" },
     ],
@@ -130,6 +130,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/icon-192.png" },
       { rel: "apple-touch-icon", href: "/icon-192.png" },
       {
         rel: "stylesheet",
@@ -183,11 +184,11 @@ function SiteHeader() {
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:py-4 md:flex md:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2.5">
           <img
-            src="/icon-192.png"
-            alt=""
-            width={36}
-            height={36}
-            className="h-9 w-9 shrink-0 rounded-full object-cover"
+            src="/binarybees-logo.png"
+            alt="BinaryBees"
+            width={60}
+            height={53}
+            className="h-[52px] w-[60px] shrink-0 object-contain"
           />
           <span className="truncate font-display text-[17px] font-bold tracking-tight text-foreground">
             WanderCompanion
@@ -342,12 +343,13 @@ function SiteFooter() {
     <footer className="border-t border-border bg-secondary/40">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 text-sm sm:grid-cols-3">
         <div>
-          <div className="flex items-center gap-2 font-display font-bold">
-            <span className="grid h-7 w-7 place-items-center rounded-md bg-foreground text-background">
-              <Compass className="h-4 w-4" />
-            </span>
-            WanderCompanion
-          </div>
+          <img
+            src="/binarybees-logo.png"
+            alt="BinaryBees"
+            width={112}
+            height={99}
+            className="h-auto w-28"
+          />
           <p className="mt-3 text-muted-foreground">
             A travel guide and itinerary maker powered by transparent, offline engines. No accounts,
             no tracking.

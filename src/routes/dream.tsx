@@ -164,7 +164,7 @@ Return STRICT JSON array, no prose, no markdown fences. Each item:
             What does your trip <span className="text-brand-gradient">feel like?</span>
           </>
         }
-        description="Filters are real — pick beaches and you get beaches. If the curated list is thin, AI fills in real-world picks within your budget."
+        description="A catalog-trained model matches your interests, season, trip length, and budget. If the curated list is thin, AI can suggest additional real-world places."
       />
 
       <section className="mx-auto max-w-5xl px-4 py-8">

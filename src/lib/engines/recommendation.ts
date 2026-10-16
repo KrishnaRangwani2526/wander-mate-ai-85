@@ -1,5 +1,6 @@
 // Recommendation engine — interests are HARD filters, score only ranks survivors.
 import { DESTINATIONS, type Destination, type Interest, type Season } from "@/data/destinations";
+import { scoreDestination, type DestinationModelScore } from "@/lib/engines/ml/destination-finder";
 
 export interface DreamInput {
   interests: Interest[];
@@ -14,6 +15,7 @@ export interface DestinationMatch {
   destination: Destination;
   score: number;
   reasons: string[];
+  model_score: DestinationModelScore;
 }
 
 export function recommendDestinations(input: DreamInput, limit = 6): DestinationMatch[] {
@@ -44,45 +46,35 @@ export function recommendDestinations(input: DreamInput, limit = 6): Destination
   // ---- SOFT SCORING on survivors ----
   const scored = pool.map<DestinationMatch>((d) => {
     const reasons: string[] = [];
-    let score = 0;
+    const modelScore = scoreDestination(d, input);
 
     if (interests.length > 0) {
       const overlap = d.interests.filter((i) => interests.includes(i));
-      score += (overlap.length / Math.max(1, Math.min(interests.length, d.interests.length))) * 0.5;
       reasons.push(`Matches ${overlap.join(", ")}`);
     }
 
     if (seasons && seasons.length > 0) {
-      score += 0.2;
       reasons.push("In peak season");
     }
 
     if (duration_days != null) {
       const [min, max] = d.ideal_duration_days;
       if (duration_days >= min && duration_days <= max) {
-        score += 0.15;
         reasons.push(`Ideal for ${duration_days}-day trip`);
-      } else {
-        const mid = (min + max) / 2;
-        score += Math.max(0, 0.1 - Math.abs(duration_days - mid) * 0.02);
       }
     }
 
     if (max_budget_per_day_inr != null && max_budget_per_day_inr > 0) {
       if (d.cost_per_day_inr <= max_budget_per_day_inr) {
-        score += 0.1;
         reasons.push(`Within ₹${max_budget_per_day_inr}/day budget`);
-      } else {
-        score += 0.04;
       }
     }
 
     if (avoid_crowds) {
-      score += (1 - d.crowd_factor) * 0.1;
       if (d.crowd_factor < 0.5) reasons.push("Off the beaten path");
     }
 
-    return { destination: d, score: Math.max(0, Math.min(1, score)), reasons };
+    return { destination: d, score: modelScore.score, reasons, model_score: modelScore };
   });
 
   return scored.sort((a, b) => b.score - a.score).slice(0, limit);
