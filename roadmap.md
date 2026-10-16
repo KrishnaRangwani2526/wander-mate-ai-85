@@ -3,4 +3,5 @@
 - [x] Add manifest-only home-screen support and app icon
 - [x] Make destination and social photos publish-safe with bundled fallbacks
 - [x] Simplify shared navigation and harmonize remaining page layouts
-- [ ] Check the preview and published-asset build output
+- [x] Check the preview and published-asset build output
+- [x] Diagnose the reported preview startup error and verify the current app loads cleanly
